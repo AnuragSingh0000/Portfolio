@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · say hello</title>
+  <meta name="description" content="Contact Anurag Singh: email, GitHub, LinkedIn, Codeforces and LeetCode.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <style>
+    .planebtn{background:none;border:0;padding:0;cursor:pointer;width:100%;display:block;color:inherit}
+    .planebtn:focus-visible{outline:2px dashed var(--red);outline-offset:6px}
+    .flying{transition:transform 1.1s cubic-bezier(.5,0,.7,.4),opacity 1.1s}
+  </style>
+</head>
+<body data-root="../../" data-page="contact">
+  <header id="nav"></header>
+  <main class="shell">
+    <section class="page-head">
+      <span class="route">/work/contact/</span>
+      <h1>Say hello</h1>
+      <p>I'm open to research collaborations, internships and interesting problems. The fastest way to reach me is <mark>a paper plane</mark>, also known as email.</p>
+    </section>
+
+    <section class="split" aria-label="Email">
+      <div class="sheet">
+        <button class="planebtn" id="plane" type="button" aria-describedby="copied">
+          <svg id="sky" viewBox="0 0 640 300" role="img" aria-label="Click the paper plane to copy the email address"></svg>
+        </button>
+        <p class="readout" id="copied" aria-live="polite"></p>
+      </div>
+      <div class="stack">
+        <svg id="wave" viewBox="-80 -60 170 220" style="width:170px" role="img" aria-label="Anurag waving"></svg>
+        <p><a id="mail" href="#" style="font-family:var(--hand);font-size:24px"></a></p>
+        <p class="muted">IIT Gandhinagar, Gujarat, India.</p>
+      </div>
+    </section>
+
+    <section class="stickies" id="stickies" aria-label="Profiles"></section>
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../assets/vendor/rough.js"></script>
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/sketch.js"></script>
+  <script>
+  (function () {
+    var K = Sketch, D = SITE, $ = K.$, S = K.S, T = K.T, E = K.E, F = K.filled;
+    var email = D.profile.email;
+    $("mail").textContent = email; $("mail").href = "mailto:" + email;
+    K.avatar($("wave"), 0, 0, 1, { wave: !K.reduce, smile: true, seed: 880 });
+
+    var s = $("sky");
+    S(s, "path", ["M110 210 C 220 90, 320 250, 430 140 S 520 80, 540 110"], { sw: 1.4, dash: [4, 8], seed: 1 });
+    F(s, "rectangle", [500, 80, 110, 74], "peach", { seed: 2, sw: 2 });
+    S(s, "linearPath", [[[500, 82], [555, 122], [610, 82]]], { sw: 2, seed: 4 });
+    T(s, 555, 180, email, { size: 15 });
+    T(s, 150, 280, "click the plane → email copied", { size: 22, color: "red", rotate: -2 });
+    var holder = E("g", { transform: "translate(110 210)" }, s);
+    var pl = E("g", { class: "flying" }, holder);
+    var inner = E("g", { transform: "rotate(-32) scale(2.4)" }, pl);
+    K.plane(inner, 12);
+
+    var busy = false;
+    $("plane").addEventListener("click", function () {
+      var done = function (ok) {
+        $("copied").innerHTML = ok ? "copied <b>" + email + "</b>. Paste it anywhere." : "Couldn't reach the clipboard. Here it is: <b>" + email + "</b>";
+      };
+      try { navigator.clipboard.writeText(email).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
+      if (busy || K.reduce) return;
+      busy = true;
+      pl.style.transform = "translate(430px,-100px) scale(.4)"; pl.style.opacity = 0;
+      setTimeout(function () {
+        pl.style.transition = "none"; pl.style.transform = "translate(-60px,40px)"; pl.style.opacity = 0;
+        requestAnimationFrame(function () { requestAnimationFrame(function () {
+          pl.style.transition = ""; pl.style.transform = ""; pl.style.opacity = 1; busy = false;
+        }); });
+      }, 1300);
+    });
+
+    var L = D.profile.links, tints = ["sky", "peach", "sage", "sky"];
+    ["github", "linkedin", "codeforces", "leetcode"].forEach(function (k, i) {
+      var a = K.el("a", "sticky"); a.href = L[k].url; a.rel = "noopener"; a.target = "_blank";
+      a.style.background = "color-mix(in srgb, var(--" + tints[i] + ") 45%, var(--sheet))";
+      a.style.setProperty("--r", [-2, 1.5, -1, 2][i] + "deg");
+      a.append(K.el("b", null, L[k].label), K.el("span", null, L[k].handle + " ↗"));
+      $("stickies").appendChild(a);
+    });
+  })();
+  </script>
+</body>
+</html>

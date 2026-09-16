@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · systems & networks</title>
+  <meta name="description" content="An ultra-fast packet crafter: Blitzping rebuilt for UDP with a DPDK kernel bypass (4.5× packet throughput) and a TTL-based traceroute.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <style>
+    .hops{font-family:var(--mono);font-size:14px;display:flex;flex-direction:column;gap:2px;min-height:6.5em}
+    .big-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+  </style>
+</head>
+<body data-root="../../../" data-page="project" data-domain="sys">
+  <header id="nav"></header>
+  <main class="shell">
+
+    <section class="page-head">
+      <span class="route">/work/projects/systems/</span>
+      <h1>Systems &amp; Networks</h1>
+      <p>Operating systems, networks and computer architecture: the part of CS where <mark>every copy of a byte costs you</mark>.</p>
+    </section>
+
+    <section class="project" id="packet" aria-labelledby="pk-h">
+      <div class="project-head">
+        <div class="meta"><span>aug – nov 2025</span><span>with Prof. Sameer Kulkarni</span><span>C · Linux · DPDK</span></div>
+        <h2 id="pk-h">Ultra-Fast Packet Crafter</h2>
+      </div>
+      <div class="split">
+        <div class="sheet stack">
+          <svg id="race" viewBox="0 0 640 300" role="img" aria-label="Paper plane packets: one lane goes through the kernel, the DPDK lane skips it"></svg>
+          <div class="controls">
+            <button class="btn peach" id="burst" type="button">send a 3-second burst</button>
+            <span class="readout" id="tally" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="stack">
+          <p>Packets are paper planes. Normally every plane stops at the <b>kernel's post office</b>: it gets copied, stamped and queued before it reaches the network card.</p>
+          <p>I took <b>Blitzping</b>, a packet-flooding tool, and changed it to craft custom <b>UDP</b> packets directly in memory instead of TCP. Then I added a <b>DPDK kernel bypass</b>: the program talks to the NIC directly with zero copies, and the planes skip the post office entirely.</p>
+          <div class="big-metrics">
+            <div class="metric wob"><b>4.5×</b><span>packet throughput vs. standard Blitzping</span></div>
+            <div class="metric wob"><b>6.7×</b><span>bit-rate transfer</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="split flip" aria-labelledby="tr-h">
+      <div class="sheet stack">
+        <svg id="trace" viewBox="0 0 640 230" role="img" aria-label="Traceroute: probes with increasing time-to-live discover each router on the path"></svg>
+        <div class="controls">
+          <button class="btn peach" id="probe" type="button">send probe (TTL 1)</button>
+          <button class="btn ghost" id="treset" type="button">reset</button>
+        </div>
+        <div class="hops" id="hops" aria-live="polite"></div>
+        <p class="caption">Addresses here are made up. The mechanism is the real one.</p>
+      </div>
+      <div class="stack">
+        <h2 id="tr-h">A plane with a fuel gauge</h2>
+        <p>The tool also includes a <b>TTL-based traceroute</b>. Each UDP probe carries a time-to-live: a fuel gauge that loses one bar at every router.</p>
+        <p>When the fuel runs out, that router mails back an <b>ICMP "time exceeded"</b> postcard, and now you know who it is. Send the next probe with one more bar of fuel and it gets one hop further, until the destination answers.</p>
+      </div>
+    </section>
+
+    <section class="stack">
+      <h3>Other corners of the web</h3>
+      <div class="domain-jump" id="others"></div>
+    </section>
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../../assets/vendor/rough.js"></script>
+  <script src="../../../assets/js/data.js"></script>
+  <script src="../../../assets/js/sketch.js"></script>
+  <script src="../../../assets/js/domain.js"></script>
+  <script src="page.js"></script>
+</body>
+</html>

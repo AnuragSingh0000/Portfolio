@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · skills</title>
+  <meta name="description" content="Skills shown as charms. Each dot is a project that used the skill.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body data-root="../../" data-page="skills">
+  <header id="nav"></header>
+  <main class="shell">
+    <section class="page-head">
+      <span class="route">/work/skills/</span>
+      <h1>Charms equipped</h1>
+      <p>In Hollow Knight, charms are what you carry into every fight. These are mine. There are no percentage bars: <mark>each dot under a charm is a project that used it</mark>, so every dot is evidence. Click a charm to see which projects.</p>
+    </section>
+
+    <section class="split" aria-label="Skills">
+      <div class="sheet charm-groups" id="charms"></div>
+      <aside class="sheet charm-detail wob" id="detail" aria-live="polite"></aside>
+    </section>
+
+    <section class="stack">
+      <h3>Courses behind the charms</h3>
+      <div class="tags" id="courses"></div>
+    </section>
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../assets/vendor/rough.js"></script>
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/sketch.js"></script>
+  <script>
+  (function () {
+    var K = Sketch, D = SITE, $ = K.$;
+    var anchors = { gen: "work/projects/deep-learning/", ml: "work/projects/ml/", rl: "work/projects/rl/", sys: "work/projects/systems/", db: "work/projects/databases/", pl: "work/projects/compilers/", hw: "work/projects/hardware/" };
+    function projectHref(p) {
+      if (p.kind === "publication" || p.kind === "internship") return K.link("work/research/");
+      if (p.domain === "algo") return D.profile.links.codeforces.url;
+      return K.link(anchors[p.domain]) + "#" + p.id;
+    }
+    var buttons = [];
+    function show(skill, btn) {
+      buttons.forEach(function (b) { b.setAttribute("aria-pressed", b === btn ? "true" : "false"); });
+      var d = $("detail"); d.innerHTML = "";
+      d.appendChild(K.el("span", "label", skill.isNew ? "new: in my projects, not on my CV yet" : skill.note || "equipped"));
+      d.appendChild(K.el("h3", null, skill.name));
+      if (!skill.projects.length) { d.appendChild(K.el("p", "muted", "Picked up " + (skill.note || "through coursework") + ", not used in a listed project yet.")); return; }
+      d.appendChild(K.el("p", "muted", skill.projects.length + (skill.projects.length === 1 ? " project uses" : " projects use") + " this charm:"));
+      var ul = K.el("ul");
+      skill.projects.forEach(function (p) { var li = K.el("li"), a = K.el("a", null, p.title); a.href = projectHref(p); li.appendChild(a); ul.appendChild(li); });
+      d.appendChild(ul);
+    }
+    var first = null;
+    D.skills.forEach(function (g) {
+      var row = K.el("div", "charm-row");
+      row.appendChild(K.el("h3", null, g.group));
+      var grid = K.el("div", "charms");
+      g.items.forEach(function (sk) {
+        var b = K.el("button", "charm" + (sk.isNew ? " new" : "")); b.type = "button"; b.setAttribute("aria-pressed", "false");
+        var gem = K.el("span", "gem wob", sk.glyph);
+        gem.style.background = "color-mix(in srgb, var(--" + g.color + ") 50%, var(--sheet))";
+        var pips = K.el("span", "pips");
+        var n = sk.projects.length;
+        for (var i = 0; i < Math.min(n, 10); i++) pips.appendChild(document.createElement("i"));
+        if (n > 10) pips.appendChild(K.el("em", null, "+" + (n - 10)));
+        if (!n) pips.appendChild(K.el("em", null, "course"));
+        b.setAttribute("aria-label", sk.name + ", " + (n ? n + " projects" : "coursework") + (sk.isNew ? ", new" : ""));
+        b.append(gem, pips, K.el("span", null, sk.name));
+        b.addEventListener("click", function () { show(sk, b); });
+        buttons.push(b); grid.appendChild(b);
+        if (sk.id === "pytorch") first = [sk, b];
+      });
+      row.appendChild(grid); $("charms").appendChild(row);
+    });
+    if (first) show(first[0], first[1]);
+
+    var seen = {};
+    D.domains.forEach(function (d) { d.courses.forEach(function (c) { if (!seen[c]) { seen[c] = 1; $("courses").appendChild(K.el("span", "tag " + (d.color === "sky" ? "" : d.color), c)); } }); });
+  })();
+  </script>
+</body>
+</html>

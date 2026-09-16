@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · milestones</title>
+  <meta name="description" content="JEE Advanced ranks, Dean's List, Academic Citation, and positions of responsibility at TEDxIITGandhinagar and Amalthea.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body data-root="../../" data-page="milestones">
+  <header id="nav"></header>
+  <main class="shell">
+    <section class="page-head">
+      <span class="route">/work/milestones/</span>
+      <h1>Milestones</h1>
+      <p>A few things I'm proud of, and one I'm proudest of: <mark>trying again</mark>.</p>
+    </section>
+
+    <section class="split" aria-labelledby="jee-h">
+      <div class="sheet"><svg id="rank" viewBox="0 0 640 320" role="img" aria-label="JEE Advanced All India Rank: 2,910 in 2022, improved to 1,544 in 2023"></svg></div>
+      <div class="stack">
+        <h2 id="jee-h">JEE Advanced, twice</h2>
+        <p>In 2022 I got an All-India Rank of <b>2,910</b>. I took another year and came back with <mark>1,544</mark>. Both put me in the top 2% nationwide.</p>
+        <p class="fun">Lower is better, so on this chart the line goes up.</p>
+      </div>
+    </section>
+
+    <section class="stack" aria-labelledby="shelf-h">
+      <h2 id="shelf-h">The shelf</h2>
+      <div class="sheet shelf" id="shelf"></div>
+    </section>
+
+    <section class="stack" aria-labelledby="por-h">
+      <h2 id="por-h">Lanyards I've worn</h2>
+      <p>Positions of responsibility: outreach, logistics, and a great many emails.</p>
+      <div class="lanyards">
+        <div class="lanyard">
+          <svg class="strap" viewBox="0 0 120 70" aria-hidden="true" data-strap></svg>
+          <div class="badge wob">
+            <span class="route">aug 2024 – may 2025</span>
+            <h3>TEDxIITGandhinagar</h3>
+            <span class="label">Executive, Curation</span>
+            <ul class="bullets">
+              <li>Built a database of <b>500+ potential speakers</b> and wrote personalised outreach emails</li>
+              <li>Hosted faculty podcasts</li>
+              <li>Coordinated speaker logistics: travel, accommodation and script development</li>
+            </ul>
+          </div>
+        </div>
+        <div class="lanyard">
+          <svg class="strap" viewBox="0 0 120 70" aria-hidden="true" data-strap></svg>
+          <div class="badge wob">
+            <span class="route">aug – nov 2023</span>
+            <h3>Amalthea, IIT Gandhinagar</h3>
+            <span class="label">Junior Sponsorship Executive</span>
+            <ul class="bullets">
+              <li>Secured sponsorships through proposals and cold outreach</li>
+              <li>Handled sponsor interactions and wrote post-event reports</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../assets/vendor/rough.js"></script>
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/sketch.js"></script>
+  <script>
+  (function () {
+    var K = Sketch, $ = K.$, S = K.S, T = K.T, E = K.E, F = K.filled;
+
+    /* rank chart, drawn to scale */
+    (function () {
+      var s = $("rank");
+      var x0 = 130, x1 = 470, yTop = 50, yBot = 250, rMin = 1000, rMax = 3000;
+      var y = function (r) { return yTop + (r - rMin) / (rMax - rMin) * (yBot - yTop); };
+      S(s, "line", [x0 - 40, yTop - 14, x0 - 40, yBot + 8], { sw: 1.6, seed: 1 });
+      [1000, 1500, 2000, 2500, 3000].forEach(function (r, i) {
+        T(s, x0 - 50, y(r) + 5, r.toLocaleString("en-IN"), { size: 14, anchor: "end" });
+        S(s, "line", [x0 - 46, y(r), x0 - 34, y(r)], { sw: 1.4, seed: 2 + i });
+        var g = S(s, "line", [x0 - 30, y(r), 600, y(r)], { sw: .8, dash: [3, 7], seed: 10 + i }); g.style.opacity = .35;
+      });
+      T(s, x0 - 90, yTop - 26, "All-India Rank (better ↑)", { size: 14, anchor: "start" });
+      T(s, x0, yBot + 44, "2022", { size: 18, weight: 700 });
+      T(s, x1, yBot + 44, "2023", { size: 18, weight: 700 });
+      S(s, "path", ["M" + x0 + " " + y(2910) + " C " + (x0 + 150) + " " + (y(2910) - 6) + ", " + (x1 - 170) + " " + (y(1544) + 40) + ", " + x1 + " " + y(1544)], { sw: 2.6, seed: 20 });
+      F(s, "circle", [x0, y(2910), 20], "sky", { seed: 21, fillStyle: "solid" });
+      F(s, "circle", [x1, y(1544), 26], "peach", { seed: 23, fillStyle: "solid" });
+      T(s, x0 + 18, y(2910) - 14, "2,910", { size: 20, anchor: "start", weight: 700 });
+      T(s, x1 + 22, y(1544) + 7, "1,544", { size: 26, anchor: "start", weight: 700 });
+      T(s, 300, 150, "tried again.", { size: 28, color: "red", rotate: -9 });
+      T(s, 560, 56, "top 2%", { size: 20, color: "red", rotate: 6 });
+      S(s, "ellipse", [560, 50, 96, 44], { color: "red", sw: 1.6, seed: 30 });
+    })();
+
+    /* keepsakes */
+    function rosette(s, color, seed) {
+      S(s, "polygon", [[[40, 60], [30, 106], [46, 96], [55, 108], [55, 62]]], { fill: true, noStroke: true, color: color, seed: seed, gap: 3 });
+      S(s, "polygon", [[[70, 60], [80, 106], [64, 96], [55, 108], [55, 62]]], { fill: true, noStroke: true, color: color, seed: seed + 1, gap: 3, angle: 41 });
+      for (var i = 0; i < 12; i++) { var a = i / 12 * Math.PI * 2; S(s, "circle", [55 + Math.cos(a) * 26, 46 + Math.sin(a) * 26, 18], { sw: 1.3, seed: seed + 2 + i }); }
+      F(s, "circle", [55, 46, 44], color, { seed: seed + 20, fillStyle: "solid" });
+    }
+    var items = [
+      { t: "Dean's List", d: "Semester 1 · top 5%", draw: function (s) { rosette(s, "peach", 100); T(s, 55, 52, "1", { size: 20, weight: 700 }); } },
+      { t: "Dean's List", d: "Semester 2 · top 5%", draw: function (s) { rosette(s, "peach", 200); T(s, 55, 52, "2", { size: 20, weight: 700 }); } },
+      { t: "Academic Citation", d: "Semester 3", draw: function (s) {
+          F(s, "rectangle", [16, 22, 78, 66], "sheet", { seed: 300, sw: 1.8 });
+          for (var i = 0; i < 3; i++) S(s, "line", [28, 40 + i * 12, 82, 40 + i * 12], { sw: 1, seed: 301 + i });
+          S(s, "circle", [78, 84, 26], { fill: true, fillStyle: "solid", noStroke: true, color: "red", seed: 305 });
+          S(s, "path", ["M72 94 L68 108 L78 102 L88 108 L84 94"], { sw: 1.6, color: "red", seed: 306 });
+        } },
+      { t: "CPI 9.25 / 10", d: "B.Tech CSE, IIT Gandhinagar", draw: function (s) {
+          T(s, 55, 64, "9.25", { size: 34, weight: 700, color: "red", rotate: -6 });
+          S(s, "ellipse", [55, 54, 96, 56], { color: "red", sw: 1.8, seed: 400 });
+          S(s, "path", ["M20 90 C 40 96, 70 84, 94 92"], { sw: 1.6, color: "red", seed: 401 });
+        } },
+      { t: "Class XII: 98.5%", d: "B. K. D. Aldrich Public School · Class X: 98%", draw: function (s) {
+          S(s, "polygon", [[[55, 20], [100, 40], [55, 60], [10, 40]]], { fill: true, fillStyle: "solid", seed: 500 });
+          S(s, "path", ["M30 50 L30 76 C 40 88, 70 88, 80 76 L80 50"], { sw: 2, seed: 501 });
+          S(s, "path", ["M96 42 L96 74"], { sw: 1.6, seed: 502 });
+          S(s, "circle", [96, 78, 8], { fill: true, fillStyle: "solid", noStroke: true, color: "peach", seed: 503 });
+        } },
+      { t: "BMVC 2026", d: "first paper, accepted", href: "../research/", draw: function (s) {
+          F(s, "rectangle", [22, 12, 66, 86], "sheet", { seed: 600, sw: 1.8 });
+          for (var i = 0; i < 4; i++) S(s, "line", [32, 30 + i * 12, 78, 30 + i * 12], { sw: 1, seed: 601 + i });
+          var g = E("g", { transform: "rotate(-14 55 84)" }, s);
+          S(g, "rectangle", [20, 72, 70, 24], { color: "red", sw: 2, seed: 610 });
+          T(g, 55, 89, "ACCEPTED", { size: 12, weight: 700, color: "red" });
+        } }
+    ];
+    items.forEach(function (it) {
+      var box = K.el(it.href ? "a" : "div", "keepsake");
+      if (it.href) { box.href = it.href; box.style.textDecoration = "none"; }
+      var svg = E("svg", { viewBox: "0 0 110 110", "aria-hidden": "true" }, box);
+      it.draw(svg);
+      box.appendChild(K.el("b", null, it.t));
+      box.appendChild(K.el("span", null, it.d));
+      $("shelf").appendChild(box);
+    });
+
+    /* lanyard straps */
+    document.querySelectorAll("[data-strap]").forEach(function (s, i) {
+      S(s, "path", ["M20 0 L56 68"], { sw: 5, color: "sky", seed: 700 + i, rough: .6 });
+      S(s, "path", ["M100 0 L64 68"], { sw: 5, color: "sky", seed: 710 + i, rough: .6 });
+      S(s, "rectangle", [52, 58, 16, 12], { sw: 1.8, seed: 720 + i });
+    });
+  })();
+  </script>
+</body>
+</html>

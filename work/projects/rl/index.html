@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · reinforcement learning</title>
+  <meta name="description" content="Deep RL agents for Atari Pac-Man: DQN, DDQN, Deep SARSA and A2C variants, with frame stacking and GAE.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <style>
+    .mover{transition:transform .1s linear}
+    .epoch{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;font-family:var(--hand);font-size:17px}
+    .epoch output{font-family:var(--display);font-size:30px;min-width:3ch;text-align:right}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+    .card{padding:16px 18px;border-radius:10px;display:flex;flex-direction:column;gap:6px;background:var(--sheet)}
+    .card b{font-family:var(--display);font-weight:400;font-size:28px;line-height:1}
+  </style>
+</head>
+<body data-root="../../../" data-page="project" data-domain="rl">
+  <header id="nav"></header>
+  <main class="shell">
+
+    <section class="page-head">
+      <span class="route">/work/projects/rl/</span>
+      <h1>RL &amp; Multi-agent</h1>
+      <p>Agents that learn by trying, failing and trying again. Which is, honestly, <mark>also how I learned RL</mark>.</p>
+    </section>
+
+    <section class="project" id="pacman" aria-labelledby="pac-h">
+      <div class="project-head">
+        <div class="meta"><span>aug – nov 2025</span><span>with Prof. Manisha Padala</span><span>Atari ALE · Gymnasium</span></div>
+        <h2 id="pac-h">Pac-Man learns to stop panicking</h2>
+      </div>
+      <div class="split">
+        <div class="sheet stack">
+          <svg id="maze" viewBox="0 0 540 330" role="img" aria-label="A Pac-Man maze. The agent's path gets cleaner as training epochs increase."></svg>
+          <div class="epoch">
+            <label for="ep">epoch</label>
+            <input type="range" id="ep" min="0" max="400" step="25" value="25">
+            <output id="epout" for="ep">25</output>
+          </div>
+          <div class="controls">
+            <button class="btn peach" id="play" type="button">run an episode</button>
+            <span class="readout" id="score" aria-live="polite"></span>
+          </div>
+          <p class="caption">A toy agent in a toy maze: exploration shrinks as epochs grow, just like ε-greedy. The red scribble is its path.</p>
+        </div>
+        <div class="stack">
+          <p>I trained agents on Atari Pac-Man for 400 epochs and compared five deep RL algorithms, including <b>DQN</b>, <b>DDQN</b>, <b>Deep SARSA</b> and <b>A2C</b> variants.</p>
+          <p>Early on, an agent mostly explores at random: that's ε-greedy exploration. Experience replay lets it learn from old mistakes, and target networks stop it chasing its own tail. Slide the epoch and watch the panic turn into a plan.</p>
+          <details class="hood">
+            <summary>under the hood</summary>
+            <ul>
+              <li>Experience replay, target networks, frame stacking, ε-greedy exploration</li>
+              <li>A2C with Generalized Advantage Estimation and temperature annealing, for stabler convergence</li>
+            </ul>
+            <div class="tags"><span class="tag peach">PyTorch</span><span class="tag">Gymnasium</span><span class="tag">Atari ALE</span></div>
+            <a data-repo="pacman" href="#">GitHub ↗</a>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="split flip" aria-labelledby="stack-h">
+      <div class="sheet"><svg id="flip" viewBox="0 0 600 220" role="img" aria-label="One frame cannot show which way a ghost moves; four stacked frames can"></svg></div>
+      <div class="stack">
+        <h2 id="stack-h">The trick that won: memory</h2>
+        <p>Show a network one frame and it can't tell which way a ghost is moving. <b>Stack the last four frames</b> like a flipbook and motion becomes visible.</p>
+        <p>That one change gave DDQN a <mark>53% higher peak score</mark>.</p>
+      </div>
+    </section>
+
+    <section class="cards" aria-label="Highlights">
+      <div class="card wob"><span class="label">the winner</span><b>DDQN + frame stacking</b><span>+53% peak score, thanks to temporal awareness</span></div>
+      <div class="card wob"><span class="label">the steady one</span><b>A2C + GAE</b><span>temperature annealing for more stable training and convergence</span></div>
+      <div class="card wob"><span class="label">the rest of the lineup</span><b>DQN · DDQN · Deep SARSA</b><span>all trained over 400 epochs on the same game</span></div>
+    </section>
+
+    <section class="stack">
+      <h3>Other corners of the web</h3>
+      <div class="domain-jump" id="others"></div>
+    </section>
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../../assets/vendor/rough.js"></script>
+  <script src="../../../assets/js/data.js"></script>
+  <script src="../../../assets/js/sketch.js"></script>
+  <script src="../../../assets/js/domain.js"></script>
+  <script src="page.js"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · deep learning & generative AI</title>
+  <meta name="description" content="Cycle Sound, adversarial robustness of Vision Transformers, and DAGMM anomaly detection, told as small interactive drawings.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <style>
+    .fade{transition:opacity .45s}
+    .sheep{transition:transform 1.2s cubic-bezier(.3,.9,.3,1)}
+    .gmm{transition:opacity .6s}
+  </style>
+</head>
+<body data-root="../../../" data-page="project" data-domain="gen">
+  <header id="nav"></header>
+  <main class="shell">
+
+    <section class="page-head">
+      <span class="route">/work/projects/deep-learning/</span>
+      <h1>Deep Learning &amp; GenAI</h1>
+      <p>My biggest circle. Most of it is about <mark>models that connect senses</mark>, like sound to image, and about what breaks them.</p>
+      <div class="controls">
+        <a class="btn peach" href="../../research/">the paper &amp; SRIP internship live on the research trail →</a>
+      </div>
+    </section>
+
+    <!-- Cycle Sound -->
+    <section class="project" id="cycle" aria-labelledby="cycle-h">
+      <div class="project-head">
+        <div class="meta"><span>jan – apr 2025</span><span>with Prof. Shanmuganathan Raman</span></div>
+        <h2 id="cycle-h">Cycle Sound</h2>
+      </div>
+      <div class="split">
+        <div class="sheet stack">
+          <svg id="loop" viewBox="0 0 600 320" role="img" aria-label="A loop: a sound becomes tokens, then a picture, and a picture becomes tokens, then a sound"></svg>
+          <div class="controls">
+            <button class="btn peach" id="a2i" type="button">sound → picture</button>
+            <button class="btn" id="i2a" type="button">picture → sound</button>
+          </div>
+          <p class="readout" id="loopnote">Pick a direction and watch the tokens travel.</p>
+        </div>
+        <div class="stack">
+          <p>Most models go one way. Cycle Sound goes <b>both</b>: hear a dog bark and draw a dog, or see a dog and make it bark.</p>
+          <p>Both directions share one idea. Squeeze the sound or image into a short sequence of discrete <b>tokens</b> with a VQ-VAE, then let a transformer translate one token language into the other.</p>
+          <details class="hood">
+            <summary>under the hood</summary>
+            <ul>
+              <li>Implemented ViT, CLIP, a VAE and DALL·E v1 as building blocks</li>
+              <li>VQ-VAE + transformer pipelines for audio → image and image → audio</li>
+              <li>24,000+ image–audio pairs from VGG-Sound, trained in two stages</li>
+            </ul>
+            <div class="tags"><span class="tag peach">PyTorch</span><span class="tag">ViT</span><span class="tag">CLIP</span><span class="tag">VQ-VAE</span><span class="tag">Transformers</span></div>
+            <a data-repo="cycle" href="#">GitHub ↗</a>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ViT -->
+    <section class="project" id="vit" aria-labelledby="vit-h">
+      <div class="project-head">
+        <div class="meta"><span>jan – apr 2025</span><span>with Prof. Anirban Dasgupta</span></div>
+        <h2 id="vit-h">Can you trick a Vision Transformer?</h2>
+      </div>
+      <div class="split flip">
+        <div class="sheet stack">
+          <svg id="vitsvg" viewBox="0 0 600 330" role="img" aria-label="An image of a ship cut into patches, each with a position tag"></svg>
+          <div class="controls" id="encs" role="group" aria-label="Positional encoding"></div>
+          <div class="controls">
+            <button class="btn peach" id="attack" type="button" aria-pressed="false">scribble an attack</button>
+          </div>
+          <p class="readout" id="vitnote"></p>
+        </div>
+        <div class="stack">
+          <p>A ViT reads an image like a jigsaw: it cuts it into patches, and each patch needs a <b>name tag</b> saying where it came from. That tag is the positional encoding.</p>
+          <p>The question: does the <i>kind</i> of name tag change how easily an attacker can fool the model? I compared sinusoidal, learnable and RoPE tags. Then I proposed a new one: instead of <b>adding</b> the tag onto the patch, <mark>staple it alongside</mark> (concatenate, in a fixed ratio), so position information stays in its own slot instead of being mixed into the patch.</p>
+          <details class="hood">
+            <summary>under the hood</summary>
+            <ul>
+              <li>Benchmarked 400+ ViT architectures on CIFAR-10 under black-box attacks</li>
+              <li>The concatenated encoding gained about 2% accuracy and beat standard positional encodings across attacks</li>
+            </ul>
+            <div class="tags"><span class="tag peach">PyTorch</span><span class="tag">ViT</span><span class="tag">CIFAR-10</span><span class="tag">adversarial attacks</span></div>
+            <a data-repo="vit" href="#">GitHub ↗</a>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAGMM -->
+    <section class="project" id="dagmm" aria-labelledby="dagmm-h">
+      <div class="project-head">
+        <div class="meta"><span>feb – apr 2025</span><span>with Prof. Anirban Dasgupta</span></div>
+        <h2 id="dagmm-h">Find the odd sheep</h2>
+      </div>
+      <div class="split">
+        <div class="sheet stack">
+          <svg id="field" viewBox="0 0 600 330" role="img" aria-label="A field of sheep that can be rearranged into a latent space with mixture-model clusters"></svg>
+          <div class="controls">
+            <button class="btn peach" id="latent" type="button" aria-pressed="false">squash into latent space</button>
+          </div>
+          <p class="readout" id="sheepnote">Twenty sheep. Two of them aren't quite sheep. Can you spot them?</p>
+        </div>
+        <div class="stack">
+          <p><b>DAGMM</b> finds anomalies in two moves. An autoencoder squashes each sample into a tiny summary, and a Gaussian mixture learns where "normal" summaries usually land. Anything far from every cluster is suspicious.</p>
+          <p>I took DAGMM apart and rebuilt pieces of it: new architectures, losses, inference criteria and mixture models.</p>
+          <ul>
+            <li>Swap the autoencoder for a <b>VAE</b>: <mark>+1.83% F1</mark></li>
+            <li>Swap it for a <b>VQ-VAE</b>: <mark>+2.24% F1</mark></li>
+            <li>A refined inference criterion: <b>+0.19% recall</b> at comparable F1</li>
+          </ul>
+          <details class="hood">
+            <summary>under the hood</summary>
+            <div class="tags"><span class="tag peach">PyTorch</span><span class="tag">VAE</span><span class="tag">VQ-VAE</span><span class="tag">GMM</span></div>
+            <a data-repo="dagmm" href="#">GitHub ↗</a>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack">
+      <h3>Other corners of the web</h3>
+      <div class="domain-jump" id="others"></div>
+    </section>
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../../assets/vendor/rough.js"></script>
+  <script src="../../../assets/js/data.js"></script>
+  <script src="../../../assets/js/sketch.js"></script>
+  <script src="../../../assets/js/domain.js"></script>
+  <script src="page.js"></script>
+</body>
+</html>

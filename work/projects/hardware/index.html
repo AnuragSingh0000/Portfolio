@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · hardware</title>
+  <meta name="description" content="An Arduino musical keyboard with seven push-button keys, a piezo buzzer and an ultrasonic sensor that changes the octave. Playable in the browser.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <style>
+    .keybtn{cursor:pointer;outline:none}
+    .keybtn:focus-visible .kring{stroke-dasharray:4 3}
+    .waves{opacity:0;transition:opacity .25s}
+    .waves.on{opacity:1}
+    .dist{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;font-family:var(--hand);font-size:17px}
+  </style>
+</head>
+<body data-root="../../../" data-page="project" data-domain="hw">
+  <header id="nav"></header>
+  <main class="shell">
+
+    <section class="page-head">
+      <span class="route">/work/projects/hardware/</span>
+      <h1>Hardware</h1>
+      <p>Digital Systems taught me how gates become computers. This project is the fun direction: <mark>buttons become music</mark>.</p>
+    </section>
+
+    <section class="project" id="keyboard" aria-labelledby="kb-h">
+      <div class="project-head">
+        <div class="meta"><span>embedded project</span><span>Arduino · C++</span></div>
+        <h2 id="kb-h">A keyboard you can play</h2>
+      </div>
+      <div class="sheet stack">
+        <svg id="board" viewBox="0 0 700 330" role="group" aria-label="Arduino keyboard: seven buttons, a buzzer and an ultrasonic sensor"></svg>
+        <div class="dist">
+          <label for="hand">hand height</label>
+          <input type="range" id="hand" min="4" max="40" value="20">
+          <output id="handout" for="hand">20 cm</output>
+        </div>
+        <p class="readout" id="kbnote" aria-live="polite">Click the buttons, or press A S D F G H J. Move your hand (the slider) to change octave.</p>
+      </div>
+      <div class="split">
+        <div class="stack">
+          <p>Seven push buttons map to seven notes, and an Arduino drives a piezo buzzer in real time. The twist is an <b>ultrasonic distance sensor</b>: raise or lower your hand above it and the whole keyboard shifts octave. That's gesture-controlled pitch for the price of a sensor.</p>
+        </div>
+        <div class="stack">
+          <details class="hood" open>
+            <summary>under the hood</summary>
+            <ul>
+              <li>Seven hardware keys for note selection and real-time tone generation</li>
+              <li>Sensor distance mapped to octave scaling</li>
+            </ul>
+            <div class="tags"><span class="tag">Arduino</span><span class="tag">C++</span><span class="tag">ultrasonic sensor</span><span class="tag">piezo</span></div>
+            <a data-repo="keyboard" href="#">GitHub ↗</a>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack">
+      <h3>Other corners of the web</h3>
+      <div class="domain-jump" id="others"></div>
+    </section>
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../../assets/vendor/rough.js"></script>
+  <script src="../../../assets/js/data.js"></script>
+  <script src="../../../assets/js/sketch.js"></script>
+  <script src="../../../assets/js/domain.js"></script>
+  <script>
+  (function () {
+    var K = Sketch, $ = K.$, S = K.S, T = K.T, E = K.E, F = K.filled;
+    var s = $("board");
+    var NOTES = [["C", 261.63, "A"], ["D", 293.66, "S"], ["E", 329.63, "D"], ["F", 349.23, "F"], ["G", 392.0, "G"], ["A", 440.0, "H"], ["B", 493.88, "J"]];
+
+    // Arduino
+    F(s, "rectangle", [30, 70, 190, 150], "sky", { seed: 1, gap: 6, sw: 2 });
+    T(s, 125, 150, "ARDUINO", { size: 22, weight: 700 });
+    T(s, 125, 172, "UNO", { size: 15 });
+    for (var p = 0; p < 10; p++) S(s, "rectangle", [48 + p * 16, 78, 10, 10], { sw: 1, seed: 10 + p });
+    // breadboard
+    F(s, "rectangle", [260, 180, 410, 130], "sage", { seed: 30, gap: 8, sw: 2 });
+    // wires from pins to buttons
+    for (var w = 0; w < 7; w++) S(s, "path", ["M" + (53 + w * 16) + " 78 C " + (60 + w * 16) + " 20, " + (300 + w * 52) + " 120, " + (310 + w * 52) + " 214"], { sw: 1.3, seed: 40 + w, color: w % 2 ? "red" : null });
+    // buzzer
+    F(s, "circle", [600, 110, 50], "sheet", { seed: 60, sw: 2 });
+    S(s, "circle", [600, 110, 12], { fill: true, fillStyle: "solid", noStroke: true, seed: 61 });
+    T(s, 600, 158, "piezo", { size: 15 });
+    var waves = E("g", { class: "waves" }, s);
+    [0, 1, 2].forEach(function (i) { S(waves, "path", ["M" + (632 + i * 12) + " " + (86 - i * 8) + " q" + (14 + i * 4) + " " + (24 + i * 8) + " 0 " + (48 + i * 16)], { sw: 1.8, color: "red", seed: 62 + i }); });
+    // ultrasonic sensor
+    F(s, "rectangle", [400, 110, 110, 40], "sky", { seed: 70, sw: 1.8 });
+    F(s, "circle", [428, 130, 30], "sheet", { seed: 72 });
+    F(s, "circle", [482, 130, 30], "sheet", { seed: 74 });
+    T(s, 455, 168, "ultrasonic", { size: 14 });
+    var handG = E("g", {}, s), beam = E("g", {}, s);
+
+    function drawHand(cm) {
+      handG.innerHTML = ""; beam.innerHTML = "";
+      var y = 100 - (cm - 4) * 2.2;   // 4cm → y100, 40cm → y21
+      var g = E("g", { transform: "translate(455 " + y + ")" }, handG);
+      F(g, "path", ["M-34 0 C -34 -14, -20 -16, -14 -12 L-12 -26 C -12 -32, -4 -32, -4 -26 L-3 -30 C -2 -36, 6 -36, 6 -30 L7 -26 C 8 -32, 16 -32, 16 -26 L16 -12 C 22 -16, 30 -12, 28 -4 C 24 6, 10 10, -4 10 C -20 10, -34 8, -34 0 Z"], "peach", { seed: 80, gap: 3.5 });
+      for (var i = 0; i < 3; i++) S(beam, "path", ["M" + (440 - i * 4) + " " + (104 - i * 0) + " L" + (440 - i * 4) + " " + (y + 14)], { sw: 1, dash: [2, 4], seed: 90 + i, color: "red" });
+    }
+    function octave(cm) { return cm < 14 ? 2 : cm < 28 ? 1 : 0.5; }
+    function octaveName(cm) { return cm < 14 ? "high octave" : cm < 28 ? "middle octave" : "low octave"; }
+
+    var keyEls = [];
+    NOTES.forEach(function (n, i) {
+      var x = 310 + i * 52, y = 240;
+      var g = E("g", { class: "keybtn", tabindex: "0", role: "button", "aria-label": "Play " + n[0] + " (key " + n[2] + ")" }, s);
+      var fill = E("g", {}, g);
+      S(g, "circle", [x, y, 36], { sw: 2, seed: 100 + i, cls: "kring" });
+      T(g, x, y + 6, n[0], { size: 18, weight: 700 });
+      T(g, x, y + 44, n[2], { size: 13, family: "var(--mono)" });
+      var play = function () {
+        var cm = +$("hand").value, f = n[1] * octave(cm);
+        K.tone(f, 0.32, "square");
+        fill.innerHTML = ""; S(fill, "circle", [x, y, 34], { fill: true, fillStyle: "solid", noStroke: true, color: "peach", seed: 120 + i });
+        waves.classList.add("on");
+        $("kbnote").innerHTML = "<b>" + n[0] + "</b> · " + Math.round(f) + " Hz · " + octaveName(cm);
+        clearTimeout(g._t); g._t = setTimeout(function () { fill.innerHTML = ""; waves.classList.remove("on"); }, 260);
+      };
+      g.addEventListener("pointerdown", function (e) { e.preventDefault(); play(); });
+      g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); play(); } });
+      keyEls.push(play);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.repeat || e.target.tagName === "INPUT" && e.target.type !== "range") return;
+      var idx = "ASDFGHJ".indexOf(e.key.toUpperCase());
+      if (idx !== -1 && !e.ctrlKey && !e.metaKey && !e.altKey) keyEls[idx]();
+    });
+    $("hand").addEventListener("input", function () { $("handout").textContent = this.value + " cm"; drawHand(+this.value); $("kbnote").textContent = octaveName(+this.value) + " (" + this.value + " cm above the sensor)"; });
+    drawHand(20);
+  })();
+  </script>
+</body>
+</html>

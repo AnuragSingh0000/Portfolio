@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · the campfire</title>
+  <meta name="description" content="The personal side of Anurag Singh's site: principles and ideas about life. Being written.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body data-root="../" data-page="hello">
+  <main class="chooser">
+    <span class="route">/hello/</span>
+    <h1>The campfire is still being built</h1>
+    <svg class="post" id="fire" viewBox="0 0 640 300" role="img" aria-label="Anurag waving next to a small campfire, with a few logs still waiting"></svg>
+    <p>This is where the informal side lives: the principles I try to live by, a few ideas about life, and the things I'd tell you on a long walk. I'm writing it now.</p>
+    <p style="margin-top:14px"><a class="btn peach" id="towork" href="../work/">meanwhile, see the work side →</a></p>
+  </main>
+  <script src="../assets/vendor/rough.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/sketch.js"></script>
+  <script>
+  (function(){
+    var K=Sketch, s=K.$("fire");
+    K.avatar(s,170,120,1,{wave:!K.reduce,smile:true,seed:620});
+    // logs
+    K.filled(s,"rectangle",[330,240,150,22],"peach",{seed:12,angle:10});
+    K.filled(s,"rectangle",[350,220,130,20],"peach",{seed:14,angle:-10});
+    // flame
+    var fl=K.E("g",{class:"flicker"},s);
+    K.filled(fl,"path",["M405 220 C 370 200, 380 150, 405 120 C 410 150, 440 160, 430 190 C 440 180, 445 170, 442 160 C 460 190, 445 220, 405 220 Z"],"peach",{seed:30,gap:3.4});
+    K.filled(fl,"path",["M405 218 C 390 205, 395 180, 408 165 C 412 185, 428 195, 405 218 Z"],"red",{seed:34,gap:2.6});
+    // pile of logs still waiting
+    K.filled(s,"rectangle",[520,250,90,16],"sage",{seed:40});
+    K.filled(s,"rectangle",[530,232,80,16],"sage",{seed:42});
+    K.T(s,560,210,"more logs coming",{size:18,color:"red",rotate:-5});
+  })();
+  </script>
+</body>
+</html>

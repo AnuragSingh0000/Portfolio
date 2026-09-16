@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · interests</title>
+  <meta name="description" content="Anurag Singh, CSE at IIT Gandhinagar: deep learning, generative AI and systems. An interactive map of interests and projects.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body data-root="../" data-page="home">
+  <header id="nav"></header>
+  <main class="shell">
+
+    <section class="hero" aria-labelledby="hi">
+      <svg class="me" id="me" viewBox="-80 -60 170 220" role="img" aria-label="A doodle of Anurag: glasses, navy blazer, blue lanyard, waving"></svg>
+      <div class="intro">
+        <span class="route">/work/</span>
+        <h1 id="hi">Hi, I'm <mark>Anurag</mark></h1>
+        <p id="tagline"></p>
+        <div class="margin-notes">
+          <span>BMVC 2026 paper ✓</span>
+          <span>CPI 9.25</span>
+          <span>interned at Skan AI</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack" aria-labelledby="web-h">
+      <div class="stack">
+        <h2 id="web-h">What pulls me in</h2>
+        <p>Each circle is a field I keep coming back to. Bigger circles mean I've spent more of my degree there. Click one to see what I built in it.</p>
+      </div>
+      <div class="sheet">
+        <svg id="web" viewBox="0 0 800 420" role="group" aria-label="Interest web. Circle size shows how much time went into each field."></svg>
+        <div class="webpanel wob" id="panel" aria-live="polite"></div>
+      </div>
+      <p class="formula">size = courses × 1 + projects × 1.5 + internships × 2 + publications × 3. No guessing, just my record.</p>
+    </section>
+
+    <section class="stack" aria-labelledby="jump-h">
+      <h3 id="jump-h">Or go straight to</h3>
+      <div class="domain-jump">
+        <a class="btn peach" href="research/">the research trail</a>
+        <a class="btn" href="skills/">skills, as charms</a>
+        <a class="btn sage" href="milestones/">milestones</a>
+        <a class="btn" href="offline/">when I'm offline</a>
+        <a class="btn peach" href="contact/">say hello</a>
+      </div>
+    </section>
+
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../assets/vendor/rough.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/sketch.js"></script>
+  <script>
+  (function(){
+    var K=Sketch, D=SITE, $=K.$;
+    $("tagline").textContent=D.profile.tagline;
+    K.avatar($("me"),0,0,1,{wave:!K.reduce,smile:true,seed:420});
+
+    var s=$("web"), selected=null;
+    var byId={}; D.domains.forEach(function(d){byId[d.id]=d;});
+    var threads=K.E("g",{},s);
+    D.links.forEach(function(l,i){ var a=byId[l[0]],b=byId[l[1]]; var n=K.S(threads,"line",[a.x,a.y,b.x,b.y],{sw:1.1,dash:[6,6],rough:.8,seed:80+i}); n.style.opacity=.5; });
+
+    D.domains.forEach(function(d){
+      var g=K.E("g",{class:"node",tabindex:"0",role:"button","aria-label":d.name+": "+d.projects.length+(d.projects.length===1?" item":" items")},s);
+      d.seed=d.id.charCodeAt(0)*13;
+      d.draw=function(){
+        g.innerHTML="";
+        K.S(g,"circle",[d.x,d.y,d.r*2-4],{fill:true,noStroke:true,color:d.color,seed:d.seed+1,gap:d.r>40?6:4.5});
+        K.S(g,"circle",[d.x,d.y,d.r*2],{seed:d.seed,sw:1.8});
+        if(selected===d.id){ K.S(g,"circle",[d.x,d.y,d.r*2+16],{seed:d.seed+2,color:"red",sw:1.8,cls:"ring"}); }
+        var parts=d.name.split(" & "), ty=d.y+d.r+21;
+        K.T(g,d.x,ty,parts[0],{size:17,weight:700});
+        if(parts[1]) K.T(g,d.x,ty+18,"& "+parts[1],{size:17,weight:700});
+      };
+      d.draw();
+      g.addEventListener("pointerenter",function(){ if(!K.reduce){ d.seed=Math.floor(Math.random()*1e5); d.draw(); } });
+      function pick(){ var prev=selected; selected=d.id; if(prev&&byId[prev]) byId[prev].draw(); d.draw(); panel(d); }
+      g.addEventListener("click",pick);
+      g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(); } });
+    });
+
+    function panel(d){
+      var p=$("panel"); p.innerHTML="";
+      p.appendChild(K.el("h4",null,d.name));
+      var tags=K.el("div","tags");
+      d.courses.forEach(function(c){ tags.appendChild(K.el("span","tag "+(d.color==="sky"?"":d.color),c)); });
+      p.appendChild(tags);
+      var ul=K.el("ul");
+      d.projects.forEach(function(pr){
+        var li=K.el("li"); li.appendChild(document.createTextNode(pr.title));
+        if(pr.kind!=="project"){ var k=K.el("span","label",pr.kind==="publication"?"paper":pr.kind==="internship"?"internship":"practice"); k.style.marginLeft="10px"; li.appendChild(k); }
+        ul.appendChild(li);
+      });
+      p.appendChild(ul);
+      var row=K.el("div","controls");
+      if(d.page){
+        var a=K.el("a","btn peach","open: "+d.teaser+" →"); a.href=K.link(d.page); row.appendChild(a);
+      } else {
+        ["codeforces","leetcode"].forEach(function(k){ var L=D.profile.links[k]; var a=K.el("a","btn",L.label+" · "+L.handle); a.href=L.url; a.rel="noopener"; row.appendChild(a); });
+      }
+      p.appendChild(row);
+    }
+
+    // start with the biggest circle selected so the panel is never empty
+    var biggest=D.domains.slice().sort(function(a,b){return b.score-a.score;})[0];
+    selected=biggest.id; biggest.draw(); panel(biggest);
+  })();
+  </script>
+</body>
+</html>

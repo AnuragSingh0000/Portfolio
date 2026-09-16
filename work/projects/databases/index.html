@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · databases & web</title>
+  <meta name="description" content="A custom B+ tree database engine with ACID transactions and write-ahead logging, Olympia sports management system, and IITGn E-gate.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <style>
+    .treebox{overflow-x:auto}
+    .treebox svg{min-width:560px}
+    .wal{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:520px){.wal{grid-template-columns:1fr}}
+    .col{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:8px;min-height:190px;position:relative;overflow:hidden}
+    .col h4{font-size:22px}
+    .col .row{font-family:var(--mono);font-size:13px}
+    .col .row.pending{color:var(--muted);font-style:italic}
+    .col .row.skip{text-decoration:line-through;text-decoration-color:var(--red);color:var(--muted)}
+    .col .stain{position:absolute;inset:0;pointer-events:none;display:none;width:100%;height:100%}
+    .col .stain.on{display:block}
+    .egate .qr{width:120px;flex:none}
+    .egate{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+  </style>
+</head>
+<body data-root="../../../" data-page="project" data-domain="db">
+  <header id="nav"></header>
+  <main class="shell">
+
+    <section class="page-head">
+      <span class="route">/work/projects/databases/</span>
+      <h1>Databases &amp; Web</h1>
+      <p>I didn't just use a database. I built one from the <mark>B+ tree up</mark>, then put a real web app on top.</p>
+    </section>
+
+    <!-- B+ tree -->
+    <section class="project" id="bptree" aria-labelledby="bp-h">
+      <div class="project-head">
+        <div class="meta"><span>jan – mar 2026</span><span>with Prof. Yogesh Meena</span></div>
+        <h2 id="bp-h">Grow a B+ tree</h2>
+      </div>
+      <div class="sheet stack">
+        <div class="treebox"><svg id="tree" viewBox="0 0 700 260" role="img" aria-label="A B+ tree of order 4; inserting keys splits nodes"></svg></div>
+        <div class="controls">
+          <label class="hand" for="key">key</label>
+          <input type="number" id="key" value="25" min="1" max="999" style="width:6ch">
+          <button class="btn peach" id="ins" type="button">insert</button>
+          <button class="btn" id="rnd" type="button">insert a random key</button>
+          <button class="btn ghost" id="treset" type="button">reset</button>
+        </div>
+        <p class="readout" id="treenote" aria-live="polite"></p>
+      </div>
+      <div class="split">
+        <div class="stack">
+          <p>Each box holds at most three keys. Insert a fourth and the box <b>splits</b> in two, pushing a key up to its parent. That keeps the tree short and every search just a few hops long. The bottom row is linked left to right, so range scans simply walk along it.</p>
+          <p>The engine I built supports full <b>CRUD</b> with disk storage, plus schema validation: <b>NOT NULL</b>, <b>UNIQUE</b>, <b>CHECK</b> and <b>foreign keys</b>. Try inserting a duplicate.</p>
+        </div>
+        <div class="stack">
+          <p class="fun">This demo is a real B+ tree running in your browser. Order 4 keeps the splits easy to see.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WAL -->
+    <section class="split flip" aria-labelledby="wal-h">
+      <div class="sheet stack">
+        <div class="wal">
+          <div class="col wob"><h4>memory</h4><div id="mem"></div>
+            <svg class="stain" id="stain" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+          <div class="col wob"><h4>the diary (WAL)</h4><div id="log"></div></div>
+        </div>
+        <div class="controls" id="walctl">
+          <button class="btn" id="t1" type="button">txn 1: add 2 athletes, COMMIT</button>
+          <button class="btn" id="t2" type="button">txn 2: add 1, no commit yet</button>
+          <button class="btn peach" id="crash" type="button">spill coffee on the server</button>
+          <button class="btn sage" id="recover" type="button">recover</button>
+        </div>
+        <p class="readout" id="walnote" aria-live="polite"></p>
+      </div>
+      <div class="stack">
+        <h2 id="wal-h">The coffee-spill test</h2>
+        <p>A database has to survive a crash at the worst moment. The rule of <b>write-ahead logging</b> is simple: write what you're about to do in a diary <i>first</i>, then do it.</p>
+        <p>After a crash, recovery re-reads the diary. Committed transactions are <b>redone</b>, and half-finished ones are thrown away, so the data is never left half-written. My transaction manager enforced all four <mark>ACID</mark> properties on top of that log.</p>
+      </div>
+    </section>
+
+    <!-- Olympia -->
+    <section class="project" id="olympia" aria-labelledby="ol-h">
+      <div class="project-head">
+        <div class="meta"><span>jan – mar 2026</span><span>with Prof. Yogesh Meena</span><span>FastAPI · MySQL</span></div>
+        <h2 id="ol-h">Olympia: sports management, sharded</h2>
+      </div>
+      <div class="split">
+        <div class="sheet stack">
+          <svg id="shards" viewBox="0 0 600 250" role="img" aria-label="Three filing cabinets; each athlete goes to the cabinet chosen by a hash of their name"></svg>
+          <div class="controls">
+            <label class="hand" for="athlete">athlete</label>
+            <input type="text" id="athlete" value="Sindhu" maxlength="18" style="width:12ch">
+            <button class="btn peach" id="file" type="button">file it</button>
+          </div>
+          <p class="readout" id="shardnote" aria-live="polite"></p>
+        </div>
+        <div class="stack">
+          <p>Olympia is a full web app for running sports events. When one table gets big, <b>hash-based sharding</b> spreads its rows across several: hash the key, take the remainder, and that's your filing cabinet. There's no lookup table and the load stays even.</p>
+          <ul>
+            <li><b>JWT</b> authentication, role-based access control and session management</li>
+            <li>Benchmarked API endpoints with <b>EXPLAIN</b>, then fixed slow queries with indexes</li>
+            <li>Sharding across multiple tables for horizontal scalability</li>
+          </ul>
+          <details class="hood">
+            <summary>under the hood</summary>
+            <div class="tags"><span class="tag">FastAPI</span><span class="tag">MySQL</span><span class="tag">JWT</span><span class="tag">RBAC</span><span class="tag">sharding</span></div>
+            <a data-repo="olympia" href="#">GitHub ↗</a>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- E-gate -->
+    <section class="sheet egate" id="egate" aria-labelledby="eg-h">
+      <svg class="qr" id="qr" viewBox="0 0 120 120" aria-hidden="true"></svg>
+      <div class="stack" style="flex:1;min-width:240px">
+        <span class="route">hackathon · Flask · MySQL</span>
+        <h3 id="eg-h">IITGn E-gate</h3>
+        <p>A campus gate that runs on QR codes. Visitors register, residents log in, guards scan, and every visit is recorded in the database. Three user journeys in one deployable app.</p>
+        <a data-repo="egate" href="#">GitHub ↗</a>
+      </div>
+    </section>
+
+    <section class="stack">
+      <h3>Other corners of the web</h3>
+      <div class="domain-jump" id="others"></div>
+    </section>
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../../assets/vendor/rough.js"></script>
+  <script src="../../../assets/js/data.js"></script>
+  <script src="../../../assets/js/sketch.js"></script>
+  <script src="../../../assets/js/domain.js"></script>
+  <script src="page.js"></script>
+</body>
+</html>

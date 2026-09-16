@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anurag Singh - Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <nav id="navbar">
+    <div class="nav-logo">AS</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#interests">Interests</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <ul>
+      <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="#experience" class="mobile-link">Experience</a></li>
+      <li><a href="#projects" class="mobile-link">Projects</a></li>
+      <li><a href="#skills" class="mobile-link">Skills</a></li>
+      <li><a href="#interests" class="mobile-link">Interests</a></li>
+      <li><a href="#contact" class="mobile-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <section id="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+
+    <div class="hero-content">
+      <div class="hero-tag reveal-up" style="--d:0s">
+        <span class="dot"></span>
+        <span>CSE @ IIT Gandhinagar | CPI 9.19</span>
+      </div>
+      <h1 class="hero-name reveal-up" style="--d:.1s">
+        Anurag<br><em>Singh</em>
+      </h1>
+      <p class="hero-tagline reveal-up" style="--d:.2s">
+        Building at the intersection of <span class="highlight">Deep Learning</span>, <span class="highlight">Computer Vision</span> and <span class="highlight">Systems</span>
+      </p>
+      <div class="hero-cta reveal-up" style="--d:.3s">
+        <a href="#projects" class="btn-primary">View Projects</a>
+        <a href="https://github.com/AnuragSingh0000" target="_blank" class="btn-ghost">GitHub -></a>
+        <a href="https://www.linkedin.com/in/anurag-singh-02b0a7290/" target="_blank" class="btn-ghost">LinkedIn -></a>
+      </div>
+
+      <div class="hero-stats reveal-up" style="--d:.4s">
+        <div class="stat">
+          <span class="stat-num" data-target="9.19">0</span>
+          <span class="stat-label">CPI / 10</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="1544">0</span>
+          <span class="stat-label">JEE Advanced AIR</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="13">0</span>
+          <span class="stat-label">Featured Projects</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="section-label reveal-up">About</div>
+      <div class="about-grid">
+        <div class="about-left reveal-up" style="--d:.05s">
+          <h2>Turning research into<br><em>real-world systems</em></h2>
+          <p>I'm a 2nd-year B.Tech student in Computer Science at <strong>IIT Gandhinagar</strong>, passionate about machine learning research and systems programming. I enjoy bridging the gap between theory and deployable solutions.</p>
+          <div class="about-badges">
+            <span class="badge">Dean's List (Sem 1 and 2)</span>
+            <span class="badge">Academic Citation (Sem 3 and 5)</span>
+            <span class="badge">Top 2% JEE Advanced</span>
+          </div>
+        </div>
+        <div class="about-right reveal-up" style="--d:.15s">
+          <div class="edu-card">
+            <div class="edu-icon">EDU</div>
+            <div class="edu-info">
+              <h4>IIT Gandhinagar</h4>
+              <p>B.Tech, Computer Science and Engineering</p>
+              <span>Aug 2023 - Present | CPI: 9.19 / 10</span>
+            </div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-icon">SCH</div>
+            <div class="edu-info">
+              <h4>B.K.D. Aldrich Public School</h4>
+              <p>Class XII - Physics, Chemistry, Mathematics</p>
+              <span>2021 - 2022 | 98.5%</span>
+            </div>
+          </div>
+          <div class="coursework-box">
+            <h4>Academic Snapshot</h4>
+            <div class="course-tags">
+              <span>Research Internship</span>
+              <span>Dean's List</span>
+              <span>Academic Citation</span>
+              <span>IITGN CSE '27</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="container">
+      <div class="section-label reveal-up">Experience</div>
+      <h2 class="section-title reveal-up">Research Work</h2>
+
+      <div class="exp-card reveal-up" style="--d:.1s">
+        <div class="exp-header">
+          <div>
+            <h3>Research Intern - Compositional Audio-to-Image Generation</h3>
+            <p class="exp-org">SRIP, IIT Gandhinagar | Prof. Shanmuganathan Raman</p>
+          </div>
+          <span class="exp-date">May 2025 - May 2026</span>
+        </div>
+        <div class="exp-tags">
+          <span>AudioToken</span><span>Diffusion Models</span><span>CLAP</span>
+          <span>Attend-and-Excite</span><span>VGG-Sound</span><span>PyTorch</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Analyzed and compared models including <strong>AudioToken</strong>, Sonic Diffusion, and <strong>Sound2Scene</strong> for audio-to-image generation.</li>
+          <li>Benchmarked <strong>20+ models</strong> on VGG-Sound, IS3, and curated datasets for audio-conditioned image synthesis.</li>
+          <li>Designed a <strong>training-free</strong> compositional pipeline combining AudioToken with Attend-and-Excite and A* loss, improving FID by up to <strong>10%</strong> and AIC by <strong>1-2%</strong>.</li>
+          <li>Trained an improved AudioToken variant with a <strong>CLAP</strong> encoder, reaching up to <strong>8% FID improvement</strong> and <strong>1-2% IIS/AIS gains</strong> on multi-audio cues.</li>
+        </ul>
+        <a href="https://drive.google.com/drive/folders/1NDP_aUirnkiKJUWIfYnV6lpQFV6QAxBZ?usp=sharing" target="_blank" class="exp-link">View Reports -></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="container">
+      <div class="section-label reveal-up">Projects</div>
+      <h2 class="section-title reveal-up">What I've Built</h2>
+
+      <div class="projects-grid">
+        <div class="project-card featured reveal-up" style="--d:.05s" data-category="ml">
+          <div class="project-card-inner">
+            <div class="project-num">01</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-ml">Deep Learning</span>
+                <span class="ptag">Vision</span>
+              </div>
+              <a href="https://github.com/Karan-Gandhi/Adversarial-Attacks-On-ViTs" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>Adversarial Robustness of Vision Transformers</h3>
+            <p>Evaluated the adversarial robustness of ViTs with sinusoidal, learnable, and RoPE positional embeddings, and proposed a new positional encoding that concatenates positional and patch embeddings in a fixed ratio.</p>
+            <ul class="project-highlights">
+              <li>Benchmarked <strong>400+ ViT architectures</strong> on CIFAR-10 under black-box attacks</li>
+              <li>Achieved <strong>2% accuracy improvement</strong> over standard positional encodings</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>PyTorch</span><span>ViT</span><span>CIFAR-10</span>
+              </div>
+              <div class="project-dates">Jan-Apr 2025</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-up" style="--d:.1s" data-category="ml">
+          <div class="project-card-inner">
+            <div class="project-num">02</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-ml">Generative AI</span>
+                <span class="ptag">Audio-Vision</span>
+              </div>
+              <a href="https://github.com/AnuragSingh0000/Cycle_Sound" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>Cycle Sound</h3>
+            <p>Built a bidirectional audio-image generation system using ViT, CLIP, VAE, and DALL-E style components, including transformer-based pipelines for audio-to-image and image-to-audio generation.</p>
+            <ul class="project-highlights">
+              <li><strong>24,000+</strong> image-audio pairs from VGG-Sound</li>
+              <li>Two-stage training with custom transformer pipelines</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>ViT</span><span>CLIP</span><span>VQ-VAE</span><span>Transformers</span>
+              </div>
+              <div class="project-dates">Jan-Apr 2025</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card featured reveal-up" style="--d:.15s" data-category="systems">
+          <div class="project-card-inner">
+            <div class="project-num">03</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-sys">Programming Languages</span>
+                <span class="ptag">Interpreter</span>
+              </div>
+              <a href="https://github.com/AnuragSingh0000/Jlox" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>Jlox</h3>
+            <p>Built a tree-walk interpreter in Java for the Lox language from <em>Crafting Interpreters</em>, covering tokenization, recursive-descent parsing, AST generation, runtime environments, variable assignment, and block scoping.</p>
+            <ul class="project-highlights">
+              <li>Implemented scanner, parser, interpreter, and AST code generation tooling in a clean package structure</li>
+              <li>Supports both REPL and file execution with syntax and runtime error reporting</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>Java</span><span>Interpreters</span><span>AST</span>
+              </div>
+              <div class="project-dates">Language Project</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-up" style="--d:.2s" data-category="systems">
+          <div class="project-card-inner">
+            <div class="project-num">04</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-sys">Compilers</span>
+                <span class="ptag">Lexer</span>
+              </div>
+              <a href="https://github.com/AnuragSingh0000/psylang" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>Psylang</h3>
+            <p>Designed a custom language frontend with Flex and Bison, with token and grammar support for types, operators, strings, loops, conditionals, functions, lists, and user-defined types.</p>
+            <ul class="project-highlights">
+              <li>Added tests for strings, control flow, invalid identifiers, and lexer error scenarios</li>
+              <li>Built Makefile-based compile and test flows with line-aware diagnostics</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>C</span><span>Flex</span><span>Bison</span><span>Make</span>
+              </div>
+              <div class="project-dates">Compiler Project</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-up" style="--d:.25s" data-category="ml">
+          <div class="project-card-inner">
+            <div class="project-num">05</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-ml">Anomaly Detection</span>
+              </div>
+              <a href="https://github.com/AnuragSingh0000/Anomaly-detection-using-mixture-models" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>DAGMM for Anomaly Detection</h3>
+            <p>Evaluated Deep Autoencoding Gaussian Mixture Model under architectural, loss-function, inference-criterion, and mixture-model modifications using VAE and VQ-VAE variants.</p>
+            <ul class="project-highlights">
+              <li><strong>2.24% F1-score</strong> gain with VQ-VAE replacement</li>
+              <li>Improved <strong>recall by 0.19%</strong> with refined inference</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>VAE</span><span>VQ-VAE</span><span>PyTorch</span>
+              </div>
+              <div class="project-dates">Feb-Apr 2025</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-up" style="--d:.3s" data-category="rl">
+          <div class="project-card-inner">
+            <div class="project-num">06</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-rl">Deep RL</span>
+                <span class="ptag">Games</span>
+              </div>
+              <a href="https://github.com/adi776borate/Pacman-DeepRL-Agents" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>Pacman DeepRL Agents</h3>
+            <p>Implemented and compared 5 deep RL algorithms on Atari Pac-Man, using experience replay, target networks, frame stacking, and epsilon-greedy exploration.</p>
+            <ul class="project-highlights">
+              <li><strong>53% higher peak score</strong> with frame-stacking DDQN</li>
+              <li>A2C with GAE and temperature annealing for stability</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>Gymnasium</span><span>Atari ALE</span><span>PyTorch</span>
+              </div>
+              <div class="project-dates">Aug-Nov 2025</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-up" style="--d:.35s" data-category="systems">
+          <div class="project-card-inner">
+            <div class="project-num">07</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-sys">Systems</span>
+                <span class="ptag">Networking</span>
+              </div>
+            </div>
+            <h3>Ultra-Fast Packet Crafter</h3>
+            <p>Modified Blitzping to construct and transmit custom UDP packets via DPDK kernel-bypass for zero-copy NIC access, and built a TTL-based traceroute using UDP probes and ICMP feedback.</p>
+            <ul class="project-highlights">
+              <li><strong>4.5x higher</strong> packet throughput over standard Blitzping</li>
+              <li><strong>6.7x higher</strong> bit-rate transfer achieved</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>DPDK</span><span>C/C++</span><span>Linux Networking</span>
+              </div>
+              <div class="project-dates">Aug-Nov 2025</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card featured reveal-up" style="--d:.4s" data-category="systems">
+          <div class="project-card-inner">
+            <div class="project-num">08</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-sys">Databases</span>
+                <span class="ptag">Systems</span>
+              </div>
+              <a href="https://github.com/AnuragSingh0000/DB_Assignment_3" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>Olympia - Sports Management System</h3>
+            <p>Built a full-stack sports management system with a custom B+ tree database engine, ACID transaction manager, WAL recovery system, and JWT/RBAC-enabled FastAPI backend.</p>
+            <ul class="project-highlights">
+              <li>Custom <strong>B+ tree</strong> with CRUD persistence and crash recovery</li>
+              <li>13-table relational schema with foreign-key constraints and benchmarking support</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>FastAPI</span><span>MySQL</span><span>B+ Tree</span><span>ACID</span>
+              </div>
+              <div class="project-dates">Jan-Mar 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-up" style="--d:.45s" data-category="ml">
+          <div class="project-card-inner">
+            <div class="project-num">09</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-ml">NLP</span>
+                <span class="ptag">LLMs</span>
+              </div>
+              <a href="https://github.com/AnuragSingh0000/Next-Word-Predictor" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>Next Word Predictor</h3>
+            <p>Built a self-supervised text generation model trained on <em>War and Peace</em>, learning word embeddings and using a custom neural network for next-word prediction.</p>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>Python</span><span>PyTorch</span><span>NLP</span>
+              </div>
+              <div class="project-dates">Aug-Nov 2024</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-up" style="--d:.5s" data-category="ml">
+          <div class="project-card-inner">
+            <div class="project-num">10</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-ml">ML</span>
+                <span class="ptag">Classification</span>
+              </div>
+              <a href="https://github.com/adi776borate/Human_Activity_Recognition" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>Human Activity Recognition</h3>
+            <p>Built a classifier on the UCI-HAR dataset using decision trees, TSFEL feature extraction, and PCA visualization, and compared a scratch implementation with scikit-learn.</p>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>Decision Tree</span><span>TSFEL</span><span>PCA</span><span>sklearn</span>
+              </div>
+              <div class="project-dates">Aug-Nov 2024</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-up" style="--d:.55s" data-category="systems">
+          <div class="project-card-inner">
+            <div class="project-num">11</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-sys">Web App</span>
+                <span class="ptag">QR Access</span>
+              </div>
+              <a href="https://github.com/AnuragSingh0000/IITGn-E-gate" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>IITGn E-gate</h3>
+            <p>Built a Flask and MySQL-based campus access system for visitors, residents, and security guards, with QR generation, authentication flows, and database-backed visit tracking.</p>
+            <ul class="project-highlights">
+              <li>Created separate user journeys for visitor registration, resident login, and guard access</li>
+              <li>Integrated QR generation, scan flow, and visit records into one deployable app</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>Flask</span><span>MySQL</span><span>QR Codes</span>
+              </div>
+              <div class="project-dates">Hackathon Project</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-up" style="--d:.6s" data-category="systems">
+          <div class="project-card-inner">
+            <div class="project-num">12</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-sys">Embedded</span>
+                <span class="ptag">Audio</span>
+              </div>
+              <a href="https://github.com/AnuragSingh0000/Musical-Keyboard" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>Musical Keyboard</h3>
+            <p>Designed an Arduino-powered mini keyboard that maps push-button input to musical notes, drives piezo buzzer output, and changes octave dynamically using ultrasonic distance sensing.</p>
+            <ul class="project-highlights">
+              <li>Used seven hardware keys for note selection and tone generation in real time</li>
+              <li>Mapped sensor distance to octave scaling for gesture-controlled pitch changes</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>Arduino</span><span>C++</span><span>Ultrasonic Sensor</span>
+              </div>
+              <div class="project-dates">Embedded Project</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card featured reveal-up" style="--d:.65s" data-category="ml">
+          <div class="project-card-inner">
+            <div class="project-num">13</div>
+            <div class="project-top">
+              <div class="project-tags">
+                <span class="ptag ptag-ml">Scientific ML</span>
+                <span class="ptag">Molecular Dynamics</span>
+              </div>
+              <a href="https://github.com/AnuragSingh0000/ML_Models_for_Molecular_Dynamics" target="_blank" class="project-link-icon">-></a>
+            </div>
+            <h3>ML Models for Molecular Dynamics</h3>
+            <p>Evaluated SchNet and sGDML pipelines for molecular force and energy prediction, reproducing and extending published molecular dynamics experiments with preprocessing, training, and testing workflows.</p>
+            <ul class="project-highlights">
+              <li>Built dataset conversion scripts for XYZ to NPZ and database preparation across both model families</li>
+              <li>Implemented training and evaluation setups for force-field and energy-surface prediction</li>
+            </ul>
+            <div class="project-footer">
+              <div class="project-stack">
+                <span>PyTorch</span><span>SchNetPack</span><span>sGDML</span>
+              </div>
+              <div class="project-dates">Research Reproduction</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="container">
+      <div class="section-label reveal-up">Skills</div>
+      <h2 class="section-title reveal-up">Core Coursework</h2>
+      <div class="skills-grid">
+        <div class="skill-group reveal-up" style="--d:.05s">
+          <div class="skill-icon">AI</div>
+          <h4>AI and Data</h4>
+          <div class="course-list">
+            <span>Machine Learning</span>
+            <span>Deep Learning</span>
+            <span>Data Science</span>
+            <span>Multi-agent AI</span>
+          </div>
+        </div>
+
+        <div class="skill-group reveal-up" style="--d:.1s">
+          <div class="skill-icon">CS</div>
+          <h4>Core CS</h4>
+          <div class="course-list">
+            <span>Data Structures and Algorithms I</span>
+            <span>Data Structures and Algorithms II</span>
+            <span>Operating Systems</span>
+            <span>Computer Networks</span>
+          </div>
+        </div>
+
+        <div class="skill-group reveal-up" style="--d:.15s">
+          <div class="skill-icon">SYS</div>
+          <h4>Systems and Software</h4>
+          <div class="course-list">
+            <span>Database Systems</span>
+            <span>Computer Architecture</span>
+            <span>Compilers</span>
+            <span>Systems Programming</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="interests">
+    <div class="container">
+      <div class="section-label reveal-up">Interests</div>
+      <h2 class="section-title reveal-up">Beyond the Terminal</h2>
+      <div class="interests-grid">
+        <div class="interest-card reveal-up" style="--d:.05s">
+          <span class="interest-kicker">Screen Stories</span>
+          <h4>Movies and Anime</h4>
+          <p>I enjoy sharp storytelling, strong direction, and worlds that stay with me after the credits roll.</p>
+        </div>
+        <div class="interest-card reveal-up" style="--d:.1s">
+          <span class="interest-kicker">Pages</span>
+          <h4>Manga and Writing</h4>
+          <p>I like long character arcs, expressive dialogue, and writing down ideas when a scene or line really lands.</p>
+        </div>
+        <div class="interest-card reveal-up" style="--d:.15s">
+          <span class="interest-kicker">Play</span>
+          <h4>Games</h4>
+          <p>Games are one of my favorite ways to experience systems design, immersion, and interactive storytelling.</p>
+        </div>
+        <div class="interest-card reveal-up" style="--d:.2s">
+          <span class="interest-kicker">Music</span>
+          <h4>Piano</h4>
+          <p>Piano gives me a slower, more reflective space to focus on rhythm, expression, and flow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="leadership">
+    <div class="container">
+      <div class="section-label reveal-up">Leadership</div>
+      <h2 class="section-title reveal-up">Positions of Responsibility</h2>
+      <div class="leadership-grid">
+        <div class="lead-card reveal-up" style="--d:.05s">
+          <div class="lead-org">TEDxIITGandhinagar</div>
+          <h4>Executive, Curation Department</h4>
+          <span class="lead-date">Aug 2024 - May 2025</span>
+          <ul>
+            <li>Built a database of <strong>500+</strong> potential speakers with personalized outreach</li>
+            <li>Coordinated travel, accommodation, and script development for speakers</li>
+          </ul>
+        </div>
+        <div class="lead-card reveal-up" style="--d:.1s">
+          <div class="lead-org">Amalthea, IIT Gandhinagar</div>
+          <h4>Junior Sponsorship Executive</h4>
+          <span class="lead-date">Aug 2023 - Nov 2023</span>
+          <ul>
+            <li>Secured sponsorships through proposals, cold outreach, and post-event reports</li>
+            <li>Managed sponsor interactions and relationship building</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="section-label reveal-up">Contact</div>
+      <div class="contact-wrapper reveal-up" style="--d:.05s">
+        <h2>Let's work<br><em>together</em></h2>
+        <p>Open to research collaborations, internships, and interesting projects.</p>
+        <div class="contact-links">
+          <a href="mailto:singh.anurag@iitgn.ac.in" class="contact-item">
+            <span class="contact-icon">@</span>
+            <div>
+              <span class="contact-label">Email</span>
+              <span class="contact-value">singh.anurag@iitgn.ac.in</span>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/anurag-singh-02b0a7290/" target="_blank" class="contact-item">
+            <span class="contact-icon">in</span>
+            <div>
+              <span class="contact-label">LinkedIn</span>
+              <span class="contact-value">anurag-singh-02b0a7290</span>
+            </div>
+          </a>
+          <a href="https://github.com/AnuragSingh0000" target="_blank" class="contact-item">
+            <span class="contact-icon">GH</span>
+            <div>
+              <span class="contact-label">GitHub</span>
+              <span class="contact-value">AnuragSingh0000</span>
+            </div>
+          </a>
+          <a href="https://codeforces.com/profile/Anu_rag_Singh" target="_blank" class="contact-item">
+            <span class="contact-icon">CF</span>
+            <div>
+              <span class="contact-label">Codeforces</span>
+              <span class="contact-value">Anu_rag_Singh</span>
+            </div>
+          </a>
+          <a href="https://leetcode.com/u/strigif/" target="_blank" class="contact-item">
+            <span class="contact-icon">LC</span>
+            <div>
+              <span class="contact-label">LeetCode</span>
+              <span class="contact-value">strigif</span>
+            </div>
+          </a>
+          <a href="tel:+918960881886" class="contact-item">
+            <span class="contact-icon">PH</span>
+            <div>
+              <span class="contact-label">Phone</span>
+              <span class="contact-value">+91 8960881886</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Anurag Singh - IITGN CSE '27</span>
+      <span>Built with HTML, CSS and JS</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

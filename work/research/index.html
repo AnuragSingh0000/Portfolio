@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · research & internships</title>
+  <meta name="description" content="From Cycle Sound to SRIP to a BMVC 2026 paper on multi-source audio-to-image generation, plus an industry internship at Skan AI.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <style>
+    .scene g.layer{opacity:0;transition:opacity .5s}
+    .scene g.layer.on{opacity:1}
+    .scene .drift{transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+  </style>
+</head>
+<body data-root="../../" data-page="research">
+  <header id="nav"></header>
+  <main class="shell">
+
+    <section class="page-head" aria-labelledby="h">
+      <span class="route">/work/research/</span>
+      <h1 id="h">The research trail</h1>
+      <p>One question has followed me for a while: <mark>can a model hear several sounds and draw all of them?</mark> It started as a project, became a summer internship, and turned into a paper.</p>
+    </section>
+
+    <section class="sheet" aria-label="Trail: Cycle Sound, then SRIP, then the BMVC paper">
+      <svg id="trail" viewBox="0 0 900 250" role="img" aria-label="A dashed trail with three stops: Cycle Sound in early 2025, the SRIP internship in summer 2025, and the BMVC 2026 paper"></svg>
+    </section>
+
+    <!-- Stop 1 -->
+    <section class="split" aria-labelledby="cycle-h">
+      <div class="stack">
+        <span class="route">stop 1 · jan – apr 2025</span>
+        <h2 id="cycle-h">Cycle Sound</h2>
+        <p>With Prof. Shanmuganathan Raman, I built a system that goes both ways: from a sound to a picture, and from a picture back to a sound. I implemented ViT, CLIP, a VAE and DALL·E v1 along the way, then trained VQ-VAE and transformer pipelines on <mark>24,000+ image–audio pairs</mark> from VGG-Sound.</p>
+        <p class="fun">One sound at a time worked. Two sounds at once turned out to be a much harder problem.</p>
+        <p><a class="btn peach" href="../projects/deep-learning/#cycle">play with the loop →</a></p>
+      </div>
+      <div class="stack">
+        <span class="route">stop 2 · may – jul 2025 · SRIP, IIT Gandhinagar</span>
+        <h2>Summer research internship</h2>
+        <ul>
+          <li>Benchmarked <b>20+ audio-to-image models</b> (AudioToken, SonicDiffusion, Sound2Scene, MACS) on VGG-Sound, IS3 and curated sets, across six metrics.</li>
+          <li>Curated multi-audio test sets of 2–5 audio–image pairs from a 50-class VGG-Sound subset.</li>
+          <li>Adapted a pretrained AudioToken to take several audio cues at inference, without retraining.</li>
+        </ul>
+        <p><a class="btn" id="reports" href="#" rel="noopener">read the reports ↗</a></p>
+      </div>
+    </section>
+
+    <!-- Stop 3: the paper, as a scroll story -->
+    <section class="stack" aria-labelledby="paper-h">
+      <span class="route">stop 3 · accepted at BMVC 2026</span>
+      <h2 id="paper-h">Why Multi-Source Audio Fails to Compose</h2>
+      <p class="paper-cite">Anurag Singh, Prajwal Singh, Shanmuganathan Raman. <i>Why Multi-Source Audio Fails to Compose: A Geometric Diagnosis and Its Remedy.</i> Accepted at the British Machine Vision Conference (BMVC), 2026.</p>
+      <div class="story">
+        <div class="figure sheet">
+          <svg class="scene" id="scene" viewBox="0 0 460 380" role="img" aria-label="Illustration that changes with each step of the story"></svg>
+          <div class="stepdots" id="dots" role="group" aria-label="Jump to step"></div>
+        </div>
+        <div class="steps" id="steps">
+          <div class="step on" data-step="0">
+            <span class="num">1 · the setup</span>
+            <h3>A dog barks. A guitar plays.</h3>
+            <p>Give an audio-to-image model both sounds and ask for a picture. You'd expect a dog <i>and</i> a guitar.</p>
+          </div>
+          <div class="step" data-step="1">
+            <span class="num">2 · the failure</span>
+            <h3>You get a dog-guitar</h3>
+            <p>Models either forget one sound entirely (<b>neglect</b>) or melt both into one strange object (<b>fusion</b>). Adding more sources makes it worse.</p>
+          </div>
+          <div class="step" data-step="2">
+            <span class="num">3 · the diagnosis</span>
+            <h3>The sounds are squashed together</h3>
+            <p>We looked at where the audio tokens land in CLIP space. Tokens from different sounds sit displaced and crowded together. We measured this with clustering: intra-class compactness, angular alignment and inter-token separation. The failure is <mark>geometric</mark>.</p>
+          </div>
+          <div class="step" data-step="3">
+            <span class="num">4 · the remedy</span>
+            <h3>Push them apart, on purpose</h3>
+            <p>At inference time we mix <b>Attend-and-Excite</b>, which makes sure every sound gets attention, with an <b>A* spatial loss</b>, which keeps their attention maps in different places. We also rebuilt the embedder around a <b>CLAP</b> audio encoder, with one token per audio source (multi-token extension).</p>
+          </div>
+          <div class="step" data-step="4">
+            <span class="num">5 · the result</span>
+            <h3>Both of them show up</h3>
+            <p>We built benchmarks from VGG-Sound with 1 to 5 audio sources (VGG2, VGG3, VGGn) and extended six audio-to-image metrics to the multi-source setting. The method ranks best on four of six metrics across five benchmarks.</p>
+          </div>
+        </div>
+      </div>
+      <div class="metrics">
+        <div class="metric wob"><b>2.25×</b><span>higher AIC than MACS</span></div>
+        <div class="metric wob"><b>1.7×</b><span>lower FID than AudioToken</span></div>
+        <div class="metric wob"><b>4 / 6</b><span>metrics where it ranks best</span></div>
+        <div class="metric wob"><b>1 → 5</b><span>audio sources per benchmark</span></div>
+      </div>
+    </section>
+
+    <!-- Industry -->
+    <section class="split flip" aria-labelledby="skan-h">
+      <div class="sheet stack">
+        <div class="controls">
+          <button class="btn peach" id="filter" type="button" aria-pressed="false">run the noise filter</button>
+          <span class="caption">made-up example events, the real logs are private</span>
+        </div>
+        <div class="logline" id="log"></div>
+        <svg id="graph" viewBox="0 0 520 170" role="img" aria-label="Process graph that simplifies when noise is filtered"></svg>
+        <p class="readout" id="graphnote"></p>
+      </div>
+      <div class="stack">
+        <span class="route">industry · may – jul 2026 · Skan AI</span>
+        <h2 id="skan-h">Data Science Intern, Process Intelligence</h2>
+        <p>Process intelligence means learning how work really happens from interaction logs: clicks, forms, windows. Those logs are noisy, and the noise turns clean processes into spaghetti.</p>
+        <ul>
+          <li>Built a <b>rule-based noise framework</b> using field- and feature-level heuristics. Every flagged event gets a readable reason.</li>
+          <li>Designed an <b>event reordering module</b> that groups fragmented, interleaved traces back into complete process instances.</li>
+          <li>Explored <b>VLM-based key–value extraction</b> with prompt normalisation.</li>
+          <li>Result: a better signal-to-noise ratio, consistently fewer process variants, and simpler process graphs.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../assets/vendor/rough.js"></script>
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/sketch.js"></script>
+  <script src="page.js"></script>
+</body>
+</html>
