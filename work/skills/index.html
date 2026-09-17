@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Anurag Singh · skills</title>
-  <meta name="description" content="Anurag Singh's technical skills, grouped by area, each linked to the projects that used it.">
+  <meta name="description" content="Anurag Singh's technical skills across deep learning, machine learning, systems, databases and web, each linked to the projects that used it.">
   <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,10 +17,13 @@
     <section class="page-head">
       <span class="route">/work/skills/</span>
       <h1>Skills</h1>
-      <p>Grouped by area. Next to each skill are the projects where I actually used it, so you can check the evidence.</p>
+      <p>The languages, frameworks and techniques I have worked with, grouped by area. Select any skill to see the projects where I have applied it.</p>
     </section>
 
-    <section class="skill-groups" id="groups" aria-label="Skills by area"></section>
+    <section class="skills-layout" aria-label="Skills">
+      <div class="sheet skill-groups" id="groups"></div>
+      <aside class="sheet skill-detail wob" id="detail" aria-live="polite"></aside>
+    </section>
 
     <section class="stack" aria-labelledby="courses-h">
       <h2 id="courses-h">Relevant coursework</h2>
@@ -34,30 +37,49 @@
   <script src="../../assets/js/sketch.js"></script>
   <script>
   (function () {
-    var K = Sketch, D = SITE, $ = K.$;
-    var colors = ["peach", "sky", "sage", "peach", "sky"];
-    D.skills.forEach(function (g, gi) {
-      var box = K.el("div", "sheet skill-group");
-      var h = K.el("h3", null, g.group);
-      box.appendChild(h);
-      g.items.forEach(function (sk) {
-        var row = K.el("div", "skill-row");
-        var name = K.el("span", "skill"); var chip = K.el("span", "tag " + colors[gi], sk.name); chip.style.fontSize = "16px";
-        name.appendChild(chip);
-        var ev = K.el("span", "evidence");
-        if (sk.projects.length) {
-          sk.projects.forEach(function (p) {
-            if (p.page) { var a = K.el("a", null, p.short); a.href = K.link(p.page.split("#")[0]) + (p.page.indexOf("#") > -1 ? "#" + p.page.split("#")[1] : ""); ev.appendChild(a); }
-            else ev.appendChild(K.el("span", null, p.short));
-          });
-        } else {
-          ev.appendChild(K.el("em", null, sk.note || "coursework"));
-        }
-        row.append(name, ev);
-        box.appendChild(row);
+    var K = Sketch, D = SITE, $ = K.$, chips = [];
+    function href(p) { return K.link(p.page.split("#")[0]) + (p.page.indexOf("#") > -1 ? "#" + p.page.split("#")[1] : ""); }
+
+    function show(sk, group, chip) {
+      chips.forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
+      var d = $("detail"); d.innerHTML = "";
+      d.appendChild(K.el("span", "route", group.group));
+      d.appendChild(K.el("h2", null, sk.name));
+      if (!sk.projects.length) { d.appendChild(K.el("p", "muted", sk.note || "Used in coursework.")); return; }
+      var n = sk.projects.length;
+      d.appendChild(K.el("p", "muted", "Applied in " + n + (n === 1 ? " project:" : " projects:")));
+      var ul = K.el("ul");
+      sk.projects.forEach(function (p) {
+        var li = K.el("li");
+        if (p.page) { var a = K.el("a", null, p.title); a.href = href(p); li.appendChild(a); }
+        else if (p.domain === "algo") { var a2 = K.el("a", null, p.title); a2.href = D.profile.links.codeforces.url; a2.rel = "noopener"; li.appendChild(a2); }
+        else li.appendChild(K.el("b", null, p.title));
+        li.appendChild(K.el("span", null, p.one));
+        ul.appendChild(li);
       });
+      d.appendChild(ul);
+    }
+
+    var first = null;
+    D.skills.forEach(function (g) {
+      var box = K.el("div", "skill-group");
+      box.appendChild(K.el("h3", null, g.group));
+      var row = K.el("div", "skill-chips");
+      g.items.forEach(function (sk) {
+        var b = K.el("button", "skill-chip", sk.name); b.type = "button";
+        b.style.setProperty("--hl", "var(--" + g.color + ")");
+        b.setAttribute("aria-pressed", "false");
+        b.addEventListener("click", function () {
+          show(sk, g, b);
+          if (window.matchMedia("(max-width: 900px)").matches) $("detail").scrollIntoView({ behavior: K.reduce ? "auto" : "smooth", block: "nearest" });
+        });
+        chips.push(b); row.appendChild(b);
+        if (sk.id === "pytorch") first = [sk, g, b];
+      });
+      box.appendChild(row);
       $("groups").appendChild(box);
     });
+    if (first) show(first[0], first[1], first[2]);
 
     var seen = {};
     D.domains.forEach(function (d) { d.courses.forEach(function (c) { if (!seen[c]) { seen[c] = 1; $("courses").appendChild(K.el("span", "tag " + (d.color === "sky" ? "" : d.color), c)); } }); });
