@@ -8,7 +8,7 @@
   <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Delius&family=Courier+Prime&display=swap">
   <link rel="stylesheet" href="../assets/css/site.css">
 </head>
 <body data-root="../" data-page="home">
@@ -31,22 +31,22 @@
 
     <section class="stack" aria-labelledby="web-h">
       <div class="stack">
-        <h2 id="web-h">What pulls me in</h2>
-        <p>Each circle is a field I keep coming back to. Bigger circles mean I've spent more of my degree there. Click one to see what I built in it.</p>
+        <h2 id="web-h">Areas of interest</h2>
+        <p>Each circle is an area I have worked in, sized by the coursework, projects and research behind it. Hover over a circle for a summary, or select it to open the related projects.</p>
       </div>
       <div class="sheet">
         <svg id="web" viewBox="0 0 800 420" role="group" aria-label="Interest web. Circle size shows how much time went into each field."></svg>
         <div class="webpanel wob" id="panel" aria-live="polite"></div>
       </div>
-      <p class="formula">size = courses × 1 + projects × 1.5 + internships × 2 + publications × 3. No guessing, just my record.</p>
     </section>
 
     <section class="stack" aria-labelledby="jump-h">
       <h3 id="jump-h">Or go straight to</h3>
       <div class="domain-jump">
-        <a class="btn peach" href="research/">the research trail</a>
-        <a class="btn" href="skills/">skills, as charms</a>
-        <a class="btn sage" href="milestones/">milestones</a>
+        <a class="btn peach" href="projects/">all projects</a>
+        <a class="btn" href="experience/">experience</a>
+        <a class="btn sage" href="skills/">skills</a>
+        <a class="btn" href="milestones/">milestones</a>
         <a class="btn" href="offline/">when I'm offline</a>
         <a class="btn peach" href="contact/">say hello</a>
       </div>
@@ -82,10 +82,12 @@
         if(parts[1]) K.T(g,d.x,ty+18,"& "+parts[1],{size:17,weight:700});
       };
       d.draw();
-      g.addEventListener("pointerenter",function(){ if(!K.reduce){ d.seed=Math.floor(Math.random()*1e5); d.draw(); } });
-      function pick(){ var prev=selected; selected=d.id; if(prev&&byId[prev]) byId[prev].draw(); d.draw(); panel(d); }
-      g.addEventListener("click",pick);
-      g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(); } });
+      function pick(){ var prev=selected; selected=d.id; if(prev&&byId[prev]&&prev!==d.id) byId[prev].draw(); d.draw(); panel(d); }
+      function go(){ location.href = d.page ? K.link(d.page) : K.link("work/projects/")+"#"+d.id; }
+      g.addEventListener("pointerenter",function(){ if(!K.reduce){ d.seed=Math.floor(Math.random()*1e5); } pick(); });
+      g.addEventListener("focus",pick);
+      g.addEventListener("click",go);
+      g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
     });
 
     function panel(d){
@@ -103,7 +105,7 @@
       p.appendChild(ul);
       var row=K.el("div","controls");
       if(d.page){
-        var a=K.el("a","btn peach","open: "+d.teaser+" →"); a.href=K.link(d.page); row.appendChild(a);
+        var a=K.el("a","btn peach","open the "+d.name+" page →"); a.href=K.link(d.page); row.appendChild(a);
       } else {
         ["codeforces","leetcode"].forEach(function(k){ var L=D.profile.links[k]; var a=K.el("a","btn",L.label+" · "+L.handle); a.href=L.url; a.rel="noopener"; row.appendChild(a); });
       }

@@ -8,23 +8,8 @@
   <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Delius&family=Courier+Prime&display=swap">
   <link rel="stylesheet" href="../../../assets/css/site.css">
-  <style>
-    .treebox{overflow-x:auto}
-    .treebox svg{min-width:560px}
-    .wal{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    @media (max-width:520px){.wal{grid-template-columns:1fr}}
-    .col{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:8px;min-height:190px;position:relative;overflow:hidden}
-    .col h4{font-size:22px}
-    .col .row{font-family:var(--mono);font-size:13px}
-    .col .row.pending{color:var(--muted);font-style:italic}
-    .col .row.skip{text-decoration:line-through;text-decoration-color:var(--red);color:var(--muted)}
-    .col .stain{position:absolute;inset:0;pointer-events:none;display:none;width:100%;height:100%}
-    .col .stain.on{display:block}
-    .egate .qr{width:120px;flex:none}
-    .egate{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
-  </style>
 </head>
 <body data-root="../../../" data-page="project" data-domain="db">
   <header id="nav"></header>
@@ -33,105 +18,99 @@
     <section class="page-head">
       <span class="route">/work/projects/databases/</span>
       <h1>Databases &amp; Web</h1>
-      <p>I didn't just use a database. I built one from the <mark>B+ tree up</mark>, then put a real web app on top.</p>
+      <p>Database internals and full-stack applications: a storage engine built from first principles, and web systems backed by relational databases.</p>
+      <nav class="jump" id="jump" aria-label="Projects on this page"></nav>
     </section>
 
     <!-- B+ tree -->
     <section class="project" id="bptree" aria-labelledby="bp-h">
       <div class="project-head">
-        <div class="meta"><span>jan – mar 2026</span><span>with Prof. Yogesh Meena</span></div>
-        <h2 id="bp-h">Grow a B+ tree</h2>
-      </div>
-      <div class="sheet stack">
-        <div class="treebox"><svg id="tree" viewBox="0 0 700 260" role="img" aria-label="A B+ tree of order 4; inserting keys splits nodes"></svg></div>
-        <div class="controls">
-          <label class="hand" for="key">key</label>
-          <input type="number" id="key" value="25" min="1" max="999" style="width:6ch">
-          <button class="btn peach" id="ins" type="button">insert</button>
-          <button class="btn" id="rnd" type="button">insert a random key</button>
-          <button class="btn ghost" id="treset" type="button">reset</button>
-        </div>
-        <p class="readout" id="treenote" aria-live="polite"></p>
+        <span class="route" data-meta="bptree"></span>
+        <h2 id="bp-h">Custom B+ Tree Database Engine</h2>
+        <div class="proj-links" data-links="bptree"><span class="tag peach">Python</span><span class="tag">B+ tree</span><span class="tag">ACID</span><span class="tag">write-ahead log</span></div>
       </div>
       <div class="split">
-        <div class="stack">
-          <p>Each box holds at most three keys. Insert a fourth and the box <b>splits</b> in two, pushing a key up to its parent. That keeps the tree short and every search just a few hops long. The bottom row is linked left to right, so range scans simply walk along it.</p>
-          <p>The engine I built supports full <b>CRUD</b> with disk storage, plus schema validation: <b>NOT NULL</b>, <b>UNIQUE</b>, <b>CHECK</b> and <b>foreign keys</b>. Try inserting a duplicate.</p>
-        </div>
-        <div class="stack">
-          <p class="fun">This demo is a real B+ tree running in your browser. Order 4 keeps the splits easy to see.</p>
+        <figure class="sheet">
+          <svg id="fig-bp" viewBox="0 0 660 320" role="img" aria-label="A B+ tree index next to a write-ahead log diary that survives a coffee spill"></svg>
+          <figcaption>Left: find rows fast. Right: never lose a committed one.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>A database has two jobs: find rows fast, and survive a crash at the worst possible moment.</p>
+          <p>A <b>B+ tree</b> handles the first. Each node holds a few sorted keys, and a full node splits and pushes a key upward, so the tree stays short and every lookup takes only a few hops. The <b>write-ahead log</b> handles the second: write what you're about to do in a diary first, then do it. After a crash (the coffee), recovery replays committed transactions and throws away unfinished ones.</p>
         </div>
       </div>
-    </section>
-
-    <!-- WAL -->
-    <section class="split flip" aria-labelledby="wal-h">
-      <div class="sheet stack">
-        <div class="wal">
-          <div class="col wob"><h4>memory</h4><div id="mem"></div>
-            <svg class="stain" id="stain" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"></svg></div>
-          <div class="col wob"><h4>the diary (WAL)</h4><div id="log"></div></div>
-        </div>
-        <div class="controls" id="walctl">
-          <button class="btn" id="t1" type="button">txn 1: add 2 athletes, COMMIT</button>
-          <button class="btn" id="t2" type="button">txn 2: add 1, no commit yet</button>
-          <button class="btn peach" id="crash" type="button">spill coffee on the server</button>
-          <button class="btn sage" id="recover" type="button">recover</button>
-        </div>
-        <p class="readout" id="walnote" aria-live="polite"></p>
-      </div>
-      <div class="stack">
-        <h2 id="wal-h">The coffee-spill test</h2>
-        <p>A database has to survive a crash at the worst moment. The rule of <b>write-ahead logging</b> is simple: write what you're about to do in a diary <i>first</i>, then do it.</p>
-        <p>After a crash, recovery re-reads the diary. Committed transactions are <b>redone</b>, and half-finished ones are thrown away, so the data is never left half-written. My transaction manager enforced all four <mark>ACID</mark> properties on top of that log.</p>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Designed and implemented a B+ tree database engine supporting full <b>CRUD</b> operations with efficient disk storage.</li>
+          <li>Built a table abstraction and database manager on top of the index, with snapshot save and load.</li>
+          <li>Built a <b>transaction manager</b> enforcing ACID properties, with write-ahead logging, locking, commit, rollback and crash recovery.</li>
+          <li>Implemented schema validation and constraints: <b>NOT NULL, UNIQUE, CHECK</b> and <b>foreign-key</b> integrity.</li>
+          <li>Benchmarked the B+ tree against a brute-force baseline and visualised the tree's insertion stages.</li>
+        </ul>
       </div>
     </section>
 
     <!-- Olympia -->
     <section class="project" id="olympia" aria-labelledby="ol-h">
       <div class="project-head">
-        <div class="meta"><span>jan – mar 2026</span><span>with Prof. Yogesh Meena</span><span>FastAPI · MySQL</span></div>
-        <h2 id="ol-h">Olympia: sports management, sharded</h2>
+        <span class="route" data-meta="olympia"></span>
+        <h2 id="ol-h">Olympia: Sports Management System</h2>
+        <div class="proj-links" data-links="olympia"><span class="tag peach">FastAPI</span><span class="tag">MySQL</span><span class="tag">JWT · RBAC</span><span class="tag">sharding</span></div>
       </div>
-      <div class="split">
-        <div class="sheet stack">
-          <svg id="shards" viewBox="0 0 600 250" role="img" aria-label="Three filing cabinets; each athlete goes to the cabinet chosen by a hash of their name"></svg>
-          <div class="controls">
-            <label class="hand" for="athlete">athlete</label>
-            <input type="text" id="athlete" value="Sindhu" maxlength="18" style="width:12ch">
-            <button class="btn peach" id="file" type="button">file it</button>
-          </div>
-          <p class="readout" id="shardnote" aria-live="polite"></p>
+      <div class="split flip">
+        <figure class="sheet">
+          <svg id="fig-ol" viewBox="0 0 660 300" role="img" aria-label="A request passes through FastAPI with JWT and role checks, then a shard router sends it to one of three MySQL shards"></svg>
+          <figcaption>One request's path: who are you, what may you do, which filing cabinet.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>Olympia is a web app for running sports events: athletes, teams, matches and results. The drawing follows one request.</p>
+          <p>It's checked with a <b>JWT</b>, matched against the user's <b>role</b>, and its query lands on one of several <b>shards</b>, picked by hashing the row's key. There's no lookup table to maintain, and the load spreads evenly as the data grows.</p>
         </div>
-        <div class="stack">
-          <p>Olympia is a full web app for running sports events. When one table gets big, <b>hash-based sharding</b> spreads its rows across several: hash the key, take the remainder, and that's your filing cabinet. There's no lookup table and the load stays even.</p>
-          <ul>
-            <li><b>JWT</b> authentication, role-based access control and session management</li>
-            <li>Benchmarked API endpoints with <b>EXPLAIN</b>, then fixed slow queries with indexes</li>
-            <li>Sharding across multiple tables for horizontal scalability</li>
-          </ul>
-          <details class="hood">
-            <summary>under the hood</summary>
-            <div class="tags"><span class="tag">FastAPI</span><span class="tag">MySQL</span><span class="tag">JWT</span><span class="tag">RBAC</span><span class="tag">sharding</span></div>
-            <a data-repo="olympia" href="#">GitHub ↗</a>
-          </details>
-        </div>
+      </div>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Created a web application with <b>FastAPI and MySQL</b>, including JWT authentication, role-based access control and session management.</li>
+          <li>Added audit logging and tamper detection for sensitive operations.</li>
+          <li>Benchmarked API endpoints with <b>EXPLAIN</b> analysis and optimised query performance with indexing, then load-tested the app.</li>
+          <li>Implemented <b>hash-based database sharding</b> across multiple tables for horizontal scalability and load distribution.</li>
+        </ul>
       </div>
     </section>
 
     <!-- E-gate -->
-    <section class="sheet egate" id="egate" aria-labelledby="eg-h">
-      <svg class="qr" id="qr" viewBox="0 0 120 120" aria-hidden="true"></svg>
-      <div class="stack" style="flex:1;min-width:240px">
-        <span class="route">hackathon · Flask · MySQL</span>
-        <h3 id="eg-h">IITGn E-gate</h3>
-        <p>A campus gate that runs on QR codes. Visitors register, residents log in, guards scan, and every visit is recorded in the database. Three user journeys in one deployable app.</p>
-        <a data-repo="egate" href="#">GitHub ↗</a>
+    <section class="project" id="egate" aria-labelledby="eg-h">
+      <div class="project-head">
+        <span class="route" data-meta="egate"></span>
+        <h2 id="eg-h">IITGn E-gate: QR-based Campus Access</h2>
+        <div class="proj-links" data-links="egate"><span class="tag peach">Flask</span><span class="tag">MySQL</span><span class="tag">QR codes</span></div>
+      </div>
+      <div class="split">
+        <figure class="sheet">
+          <svg id="fig-eg" viewBox="0 0 660 230" role="img" aria-label="A visitor registers, receives a QR pass, a guard scans it, and the visit is logged"></svg>
+          <figcaption>Register, get a pass, scan at the gate, logged.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>A campus gate that runs on QR codes. Visitors register with the details of a host on campus, and residents simply log in. Both get a <b>QR pass</b>.</p>
+          <p>At the gate, a guard scans the pass, checks the details that pop up, and the visit is recorded. No paper register required.</p>
+        </div>
+      </div>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Built a <b>Flask + MySQL</b> campus access system during the HackRush hackathon, with separate journeys for visitors, residents and security guards.</li>
+          <li>Implemented registration and login flows, QR pass generation, and host details for visitors.</li>
+          <li>Built the guards' scanner view and a database of visits to track entries.</li>
+        </ul>
       </div>
     </section>
 
     <section class="stack">
-      <h3>Other corners of the web</h3>
+      <h3>Other domains</h3>
       <div class="domain-jump" id="others"></div>
     </section>
   </main>

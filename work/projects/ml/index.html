@@ -4,18 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Anurag Singh · data science & machine learning</title>
-  <meta name="description" content="Human activity recognition, a War and Peace next-word predictor, and ML force fields for molecular dynamics.">
+  <meta name="description" content="Human activity recognition, a War and Peace next-word predictor, and ML models for molecular dynamics.">
   <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Delius&family=Courier+Prime&display=swap">
   <link rel="stylesheet" href="../../../assets/css/site.css">
-  <style>
-    .sentence{font-family:var(--body);font-size:19px;line-height:1.7;min-height:5.2em;padding:12px 14px;border-radius:6px}
-    .sentence .typed{background:color-mix(in srgb,var(--sage) 45%, transparent);border-radius:3px;padding:0 2px}
-    .caret{display:inline-block;width:2px;height:1.1em;background:var(--red);vertical-align:-3px;margin-left:2px;animation:blink 1s steps(1) infinite}
-    @keyframes blink{50%{opacity:0}}
-  </style>
 </head>
 <body data-root="../../../" data-page="project" data-domain="ml">
   <header id="nav"></header>
@@ -24,30 +18,41 @@
     <section class="page-head">
       <span class="route">/work/projects/ml/</span>
       <h1>Data Science &amp; ML</h1>
-      <p>The fundamentals circle: <mark>trees, embeddings and learned physics</mark>. It's also where my industry internship lives.</p>
-      <div class="controls"><a class="btn" href="../../research/#skan-h">Skan AI internship: taming noisy process logs →</a></div>
+      <p>Projects applying machine learning to sensor data, natural language and molecular physics: activity recognition from accelerometer signals, next-word prediction, and learned force fields for molecular dynamics.</p>
+      <nav class="jump" id="jump" aria-label="Projects on this page"></nav>
+      <p class="fun">My data science internship at Skan AI is described on the <a href="../../experience/#skan-h">Experience page →</a></p>
     </section>
 
     <!-- HAR -->
     <section class="project" id="har" aria-labelledby="har-h">
       <div class="project-head">
-        <div class="meta"><span>aug – nov 2024</span><span>UCI-HAR dataset</span></div>
-        <h2 id="har-h">What is this person doing?</h2>
+        <span class="route" data-meta="har"></span>
+        <h2 id="har-h">Human Activity Recognition</h2>
+        <div class="proj-links" data-links="har"><span class="tag peach">Python</span><span class="tag">scikit-learn</span><span class="tag">TSFEL</span><span class="tag">PCA</span><span class="tag">LLM prompting</span></div>
       </div>
       <div class="split">
-        <div class="sheet stack">
-          <svg id="harsvg" viewBox="0 0 720 340" role="img" aria-label="A stick figure and a decision tree that lights up the path to its activity"></svg>
-          <div class="controls" id="acts" role="group" aria-label="Pick an activity"></div>
-          <p class="caption">A simplified tree for show. The real one split on TSFEL features from phone accelerometer and gyroscope signals.</p>
+        <figure class="sheet">
+          <svg id="fig-har" viewBox="0 0 660 330" role="img" aria-label="A walking stick figure, its accelerometer signal, and a decision tree that follows a path to 'walking'"></svg>
+          <figcaption>One sample's journey: wobbles, then features, then a few yes/no questions.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>A phone in your pocket records tiny wobbles through its accelerometer. From those wobbles alone, can a model tell whether you're walking, taking the stairs, sitting, standing or lying down?</p>
+          <p>In the drawing, the raw signal is turned into features, and a <b>decision tree</b> asks a handful of yes/no questions until it lands on an activity. We then asked a large language model to do the same from a few examples, and compared the two.</p>
         </div>
-        <div class="stack">
-          <p>A phone in your pocket records tiny wobbles. From those alone, can a model tell whether you're walking, climbing stairs, sitting or lying down?</p>
-          <p>I extracted features with <b>TSFEL</b>, trained <b>decision trees</b>, and visualised the classes with <b>PCA</b>. Then I wrote a decision tree <mark>from scratch</mark> and raced it against scikit-learn's.</p>
-          <details class="hood">
-            <summary>under the hood</summary>
-            <div class="tags"><span class="tag peach">Python</span><span class="tag">scikit-learn</span><span class="tag">TSFEL</span><span class="tag">PCA</span></div>
-            <a data-repo="har" href="#">GitHub ↗</a>
-          </details>
+      </div>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Explored the UCI-HAR accelerometer data and visualised the six activities with PCA on total acceleration, on <b>TSFEL</b> features, and on the dataset's own features.</li>
+          <li>Trained decision trees on raw signals, TSFEL features and provided features, and compared them across tree depths.</li>
+          <li>Implemented a <b>decision tree from scratch</b> and compared its performance with scikit-learn's.</li>
+          <li>Classified activities with zero-shot and few-shot <b>LLM prompting</b> and compared it against the decision trees.</li>
+        </ul>
+        <div class="metrics">
+          <div class="metric wob"><b>6</b><span>activities classified</span></div>
+          <div class="metric wob"><b>3</b><span>feature sets compared</span></div>
+          <div class="metric wob"><b>2</b><span>trees: scratch vs. scikit-learn</span></div>
         </div>
       </div>
     </section>
@@ -55,64 +60,63 @@
     <!-- NWP -->
     <section class="project" id="nwp" aria-labelledby="nwp-h">
       <div class="project-head">
-        <div class="meta"><span>aug – nov 2024</span><span>self-supervised</span></div>
-        <h2 id="nwp-h">Finish Tolstoy's sentence</h2>
+        <span class="route" data-meta="nwp"></span>
+        <h2 id="nwp-h">Next Word Predictor</h2>
+        <div class="proj-links" data-links="nwp"><span class="tag peach">PyTorch</span><span class="tag">word embeddings</span><span class="tag">t-SNE</span><span class="tag">Streamlit</span></div>
       </div>
       <div class="split flip">
-        <div class="sheet stack">
-          <div class="sentence wob" id="sentence" aria-live="polite"></div>
-          <div class="controls" id="nexts" role="group" aria-label="Suggested next words"></div>
-          <div class="controls">
-            <button class="btn peach" id="ramble" type="button">let it ramble (8 words)</button>
-            <button class="btn ghost" id="reset" type="button">start over</button>
-          </div>
-          <p class="caption">A toy word-pair model built from the opening lines of <i>War and Peace</i> (Maude translation), so it runs in your browser. The real project was a neural network with learned embeddings, trained on the whole book.</p>
+        <figure class="sheet">
+          <svg id="fig-nwp" viewBox="0 0 620 320" role="img" aria-label="A window of words from War and Peace goes through embeddings and a neural network, which guesses the next word"></svg>
+          <figcaption>A sliding window over Tolstoy. The book is its own answer key.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>No labels needed. The model slides a window over <i>War and Peace</i>, looks up a learned <b>vector</b> for each word in the window, and a neural network guesses the word that comes next. Every sentence in the book is a free training example.</p>
+          <p>Along the way, words that behave alike drift close together in embedding space. The small scatter in the drawing is that idea, and we checked it with t-SNE.</p>
         </div>
-        <div class="stack">
-          <p>No labels, just one very long book. The model reads <i>War and Peace</i>, learns a vector for every word, and guesses what comes next. Tolstoy supplies his own answer key.</p>
-          <p>I built the network myself, with adjustable hyperparameters, so the same book can be read with different context sizes and embedding widths.</p>
-          <details class="hood">
-            <summary>under the hood</summary>
-            <div class="tags"><span class="tag peach">PyTorch</span><span class="tag">word embeddings</span><span class="tag">NLP</span></div>
-            <a data-repo="nwp" href="#">GitHub ↗</a>
-          </details>
-        </div>
+      </div>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Developed a self-supervised text generation model trained on <i>War and Peace</i> that learns word embeddings.</li>
+          <li>Built a custom neural network for next-word prediction with adjustable hyperparameters such as context length and embedding size.</li>
+          <li>Visualised the learned embeddings with t-SNE to see which words cluster together.</li>
+          <li>Deployed a <b>Streamlit app</b> where you type a prompt, pick a model variant and generate text. It's live.</li>
+        </ul>
       </div>
     </section>
 
     <!-- MD -->
     <section class="project" id="md" aria-labelledby="md-h">
       <div class="project-head">
-        <div class="meta"><span>research reproduction</span><span>SchNet · sGDML</span></div>
-        <h2 id="md-h">Teaching a network physics</h2>
+        <span class="route" data-meta="md"></span>
+        <h2 id="md-h">ML Models for Molecular Dynamics</h2>
+        <div class="proj-links" data-links="md"><span class="tag peach">PyTorch</span><span class="tag">SchNetPack</span><span class="tag">sGDML</span></div>
       </div>
       <div class="split">
-        <div class="sheet stack">
-          <svg id="mol" viewBox="0 0 600 320" role="img" aria-label="An ethanol molecule jiggling, with optional force arrows on each atom"></svg>
-          <div class="controls">
-            <button class="btn peach" id="forces" type="button" aria-pressed="false">show predicted forces</button>
-            <button class="btn ghost" id="kick" type="button">heat it up</button>
-          </div>
-          <p class="caption">Ethanol, a classic molecular dynamics benchmark. The toy springs here stand in for the learned energy surface.</p>
+        <figure class="sheet">
+          <svg id="fig-md" viewBox="0 0 620 300" role="img" aria-label="An ethanol molecule with force arrows, and an energy curve where force is the downhill slope"></svg>
+          <figcaption>Learn the energy landscape, and the forces come for free.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>Simulating molecules with quantum chemistry is accurate but painfully slow. <b>SchNet</b> and <b>sGDML</b> learn the <mark>potential energy surface</mark> from reference calculations instead.</p>
+          <p>The force on each atom is just the downhill slope of that surface: the red arrows in the drawing. Once the surface is learned, a simulation can take many cheap steps instead of a few expensive ones.</p>
         </div>
-        <div class="stack">
-          <p>Simulating molecules with quantum chemistry is painfully slow. <b>SchNet</b> and <b>sGDML</b> learn the <mark>energy surface</mark> from examples instead. Forces fall out as its slope, so a simulation can take millions of cheap steps.</p>
-          <p>I reproduced and extended published molecular dynamics experiments with both model families.</p>
-          <details class="hood">
-            <summary>under the hood</summary>
-            <ul>
-              <li>Dataset conversion scripts (XYZ → NPZ) and database preparation for both pipelines</li>
-              <li>Training and evaluation setups for force-field and energy-surface prediction</li>
-            </ul>
-            <div class="tags"><span class="tag peach">PyTorch</span><span class="tag">SchNetPack</span><span class="tag">sGDML</span></div>
-            <a data-repo="md" href="#">GitHub ↗</a>
-          </details>
-        </div>
+      </div>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Evaluated SchNet and sGDML pipelines for molecular force and energy prediction, reproducing and extending published experiments.</li>
+          <li>Wrote dataset conversion scripts (XYZ → NPZ) and built the database files that both training pipelines consume.</li>
+          <li>Set up training for force and energy prediction, and tuned hyperparameters like the number of interactions, basis functions and cutoff radius.</li>
+          <li>Evaluated the trained models with MSE and MAE.</li>
+        </ul>
       </div>
     </section>
 
     <section class="stack">
-      <h3>Other corners of the web</h3>
+      <h3>Other domains</h3>
       <div class="domain-jump" id="others"></div>
     </section>
   </main>

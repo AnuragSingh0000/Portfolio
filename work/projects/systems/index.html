@@ -4,16 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Anurag Singh · systems & networks</title>
-  <meta name="description" content="An ultra-fast packet crafter: Blitzping rebuilt for UDP with a DPDK kernel bypass (4.5× packet throughput) and a TTL-based traceroute.">
+  <meta name="description" content="Ultra-Fast Packet Crafter: Blitzping rebuilt for UDP with a DPDK kernel bypass (4.5× packet throughput, 6.7× bit-rate) and a TTL-based traceroute.">
   <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Delius&family=Courier+Prime&display=swap">
   <link rel="stylesheet" href="../../../assets/css/site.css">
-  <style>
-    .hops{font-family:var(--mono);font-size:14px;display:flex;flex-direction:column;gap:2px;min-height:6.5em}
-    .big-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
-  </style>
 </head>
 <body data-root="../../../" data-page="project" data-domain="sys">
   <header id="nav"></header>
@@ -22,52 +18,44 @@
     <section class="page-head">
       <span class="route">/work/projects/systems/</span>
       <h1>Systems &amp; Networks</h1>
-      <p>Operating systems, networks and computer architecture: the part of CS where <mark>every copy of a byte costs you</mark>.</p>
+      <p>Systems and networking work focused on high-throughput packet processing, including kernel-bypass networking with DPDK and network path discovery.</p>
     </section>
 
     <section class="project" id="packet" aria-labelledby="pk-h">
       <div class="project-head">
-        <div class="meta"><span>aug – nov 2025</span><span>with Prof. Sameer Kulkarni</span><span>C · Linux · DPDK</span></div>
+        <span class="route" data-meta="packet"></span>
         <h2 id="pk-h">Ultra-Fast Packet Crafter</h2>
+        <div class="proj-links" data-links="packet"><span class="tag sage">C</span><span class="tag">DPDK</span><span class="tag">Linux</span><span class="tag">UDP · ICMP</span></div>
       </div>
       <div class="split">
-        <div class="sheet stack">
-          <svg id="race" viewBox="0 0 640 300" role="img" aria-label="Paper plane packets: one lane goes through the kernel, the DPDK lane skips it"></svg>
-          <div class="controls">
-            <button class="btn peach" id="burst" type="button">send a 3-second burst</button>
-            <span class="readout" id="tally" aria-live="polite"></span>
-          </div>
-        </div>
-        <div class="stack">
-          <p>Packets are paper planes. Normally every plane stops at the <b>kernel's post office</b>: it gets copied, stamped and queued before it reaches the network card.</p>
-          <p>I took <b>Blitzping</b>, a packet-flooding tool, and changed it to craft custom <b>UDP</b> packets directly in memory instead of TCP. Then I added a <b>DPDK kernel bypass</b>: the program talks to the NIC directly with zero copies, and the planes skip the post office entirely.</p>
-          <div class="big-metrics">
-            <div class="metric wob"><b>4.5×</b><span>packet throughput vs. standard Blitzping</span></div>
-            <div class="metric wob"><b>6.7×</b><span>bit-rate transfer</span></div>
-          </div>
+        <figure class="sheet">
+          <svg id="fig-pk" viewBox="0 0 660 380" role="img" aria-label="Paper-plane packets: the normal path stops at the kernel, the DPDK path goes straight to the network card; below, a traceroute with growing time-to-live"></svg>
+          <figcaption>Top: two ways out of the machine. Bottom: probes with a fuel gauge.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>Picture every packet as a paper plane. Normally each plane stops at the <b>kernel's post office</b>: it gets copied, stamped and queued before it reaches the network card. <b>DPDK</b> lets a program talk to the NIC directly from user space, so the planes skip the post office entirely.</p>
+          <p>The same tool doubles as a <b>traceroute</b>. Each probe carries a time-to-live, a fuel gauge that loses a bar at every router. When the fuel runs out, that router mails back an ICMP postcard, and the next probe gets one bar more.</p>
         </div>
       </div>
-    </section>
-
-    <section class="split flip" aria-labelledby="tr-h">
-      <div class="sheet stack">
-        <svg id="trace" viewBox="0 0 640 230" role="img" aria-label="Traceroute: probes with increasing time-to-live discover each router on the path"></svg>
-        <div class="controls">
-          <button class="btn peach" id="probe" type="button">send probe (TTL 1)</button>
-          <button class="btn ghost" id="treset" type="button">reset</button>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Modified <b>Blitzping</b> to construct and transmit custom UDP packets in memory instead of TCP.</li>
+          <li>Extended the tool with a <b>DPDK kernel bypass</b> for zero-copy NIC access: hugepage-backed memory pools, poll-mode drivers and VFIO-PCI, all transmitting from user space.</li>
+          <li>Built a <b>TTL-based traceroute</b> with UDP probes and ICMP feedback (Time Exceeded, Destination Unreachable) for hop-by-hop path discovery, with per-hop RTT measurement.</li>
+          <li>Outperformed standard Blitzping with <b>4.5× higher packet throughput</b> (~105k → ~472k packets/s) and <b>6.7× higher bit-rate</b> (~23.7 → ~159 Mbps).</li>
+        </ul>
+        <div class="metrics">
+          <div class="metric wob"><b>4.5×</b><span>packet throughput</span></div>
+          <div class="metric wob"><b>6.7×</b><span>bit-rate transfer</span></div>
+          <div class="metric wob"><b>~472k</b><span>packets per second with DPDK</span></div>
         </div>
-        <div class="hops" id="hops" aria-live="polite"></div>
-        <p class="caption">Addresses here are made up. The mechanism is the real one.</p>
-      </div>
-      <div class="stack">
-        <h2 id="tr-h">A plane with a fuel gauge</h2>
-        <p>The tool also includes a <b>TTL-based traceroute</b>. Each UDP probe carries a time-to-live: a fuel gauge that loses one bar at every router.</p>
-        <p>When the fuel runs out, that router mails back an <b>ICMP "time exceeded"</b> postcard, and now you know who it is. Send the next probe with one more bar of fuel and it gets one hop further, until the destination answers.</p>
       </div>
     </section>
 
     <section class="stack">
-      <h3>Other corners of the web</h3>
+      <h3>Other domains</h3>
       <div class="domain-jump" id="others"></div>
     </section>
   </main>
@@ -77,6 +65,49 @@
   <script src="../../../assets/js/data.js"></script>
   <script src="../../../assets/js/sketch.js"></script>
   <script src="../../../assets/js/domain.js"></script>
-  <script src="page.js"></script>
+  <script>
+  (function () {
+    var K = Sketch, S = K.S, T = K.T, E = K.E, F = K.filled, s = K.$("fig-pk");
+    function place(g, x, y, rot) { g.setAttribute("transform", "translate(" + x + " " + y + ") rotate(" + (rot || 0) + ")"); }
+
+    // machine + lanes
+    T(s, 60, 24, "your program", { size: 14, weight: 700 });
+    F(s, "rectangle", [16, 36, 88, 150], "sheet", { seed: 1, sw: 2 });
+    T(s, 60, 116, "Blitzping", { size: 13 });
+    F(s, "rectangle", [566, 36, 60, 150], "sky", { seed: 3, gap: 5, angle: 60 });
+    T(s, 596, 206, "NIC", { size: 15, weight: 700 });
+    S(s, "path", ["M110 62 L560 62"], { sw: 1.3, dash: [6, 6], seed: 5 });
+    S(s, "path", ["M110 150 C 200 150, 230 196, 330 196 S 460 150, 560 150"], { sw: 1.3, dash: [6, 6], seed: 6 });
+    F(s, "rectangle", [276, 170, 108, 52], "peach", { seed: 7, sw: 2 });
+    T(s, 330, 196, "kernel", { size: 16, weight: 700 });
+    T(s, 330, 212, "copy · stamp · queue", { size: 11 });
+    T(s, 336, 48, "DPDK: straight from user space", { size: 14, weight: 700 });
+    T(s, 470, 136, "the normal way", { size: 13 });
+    [160, 230, 300, 370, 440, 510].forEach(function (x, i) {
+      var g = K.plane(s, 12); place(g, x, 62);
+      S(s, "line", [x - 30, 56, x - 18, 56], { sw: 1, seed: 20 + i }); S(s, "line", [x - 34, 68, x - 20, 68], { sw: 1, seed: 30 + i });
+    });
+    [[250, 180, 25], [410, 172, -25]].forEach(function (p) { var g = K.plane(s, 12); place(g, p[0], p[1], p[2]); });
+    T(s, 520, 100, "4.5×", { size: 22, color: "red", weight: 700, rotate: -4 });
+
+    // traceroute row
+    S(s, "line", [16, 244, 644, 244], { sw: 1, dash: [2, 6], seed: 40 });
+    T(s, 16, 272, "traceroute", { size: 14, weight: 700, anchor: "start" });
+    var xs = [60, 180, 300, 420, 560], Y = 316;
+    for (var i = 0; i < 4; i++) S(s, "line", [xs[i] + 22, Y, xs[i + 1] - 24, Y], { sw: 1.3, dash: [4, 5], seed: 50 + i });
+    F(s, "rectangle", [36, Y - 16, 48, 32], "sheet", { seed: 60 });
+    [180, 300, 420].forEach(function (x, k) {
+      F(s, "circle", [x, Y, 40], "sky", { seed: 70 + k * 3 });
+      T(s, x, Y + 40, "hop " + (k + 1), { size: 12 });
+      T(s, x, Y + 56, "TTL " + (k + 1), { size: 12, color: "red" });
+      var pc = E("g", { transform: "translate(" + (x - 58) + " " + (Y - 26) + ")" }, s);
+      F(pc, "rectangle", [-11, -7, 22, 14], "sheet", { seed: 80 + k, sw: 1.2 });
+      S(pc, "linearPath", [[[-11, -7], [0, 1], [11, -7]]], { sw: 1, seed: 90 + k });
+    });
+    F(s, "rectangle", [542, Y - 24, 36, 48], "sage", { seed: 100 });
+    T(s, 560, Y + 40, "server", { size: 12 });
+    T(s, 644, 272, "✉ = ICMP \"time exceeded\" postcard", { size: 12, anchor: "end" });
+  })();
+  </script>
 </body>
 </html>

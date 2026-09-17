@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anurag Singh · projects</title>
+  <meta name="description" content="All of Anurag Singh's projects, grouped by domain: deep learning, ML, reinforcement learning, systems, databases, compilers and hardware.">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Delius&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body data-root="../../" data-page="projects">
+  <header id="nav"></header>
+  <main class="shell">
+    <section class="page-head">
+      <span class="route">/work/projects/</span>
+      <h1>Projects</h1>
+      <p>A complete list of my projects, organised by domain. Expand a domain to see its projects, or open its page for detailed write-ups of each one.</p>
+      <div class="controls">
+        <button class="btn ghost" id="openall" type="button">expand all</button>
+        <button class="btn ghost" id="closeall" type="button">collapse all</button>
+      </div>
+    </section>
+
+    <section class="domains" id="domains" aria-label="Domains"></section>
+  </main>
+  <footer id="foot"></footer>
+
+  <script src="../../assets/vendor/rough.js"></script>
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/sketch.js"></script>
+  <script>
+  (function () {
+    var K = Sketch, D = SITE, root = K.$("domains");
+    var kindLabel = { publication: "paper", internship: "internship", practice: "practice" };
+    var ordered = D.domains.slice().sort(function (a, b) { return b.score - a.score; });
+
+    ordered.forEach(function (d, i) {
+      var det = K.el("details", "domain"); det.id = d.id;
+      if (i === 0) det.open = true;
+      var sum = K.el("summary");
+      var dot = K.el("span", "dot"); dot.style.background = "color-mix(in srgb, var(--" + d.color + ") 70%, var(--sheet))";
+      var name = K.el("h2", null, d.name);
+      var n = d.projects.length;
+      var count = K.el("span", "count", n + (n === 1 ? " item" : " items"));
+      var teaser = K.el("span", "teaser", d.teaser);
+      sum.append(dot, name, count, teaser);
+      det.appendChild(sum);
+
+      var body = K.el("div", "body");
+      var ul = K.el("ul", "plist");
+      d.projects.forEach(function (p) {
+        var li = K.el("li");
+        var titleWrap = K.el("span");
+        var a = K.el(p.page ? "a" : "span", "ptitle", p.title);
+        if (p.page) a.href = K.link(p.page.split("#")[0]) + (p.page.indexOf("#") > -1 ? "#" + p.page.split("#")[1] : "");
+        titleWrap.appendChild(a);
+        if (kindLabel[p.kind]) { var lab = K.el("span", "label", kindLabel[p.kind]); lab.style.marginLeft = "10px"; titleWrap.appendChild(lab); }
+        li.append(titleWrap, K.el("span", "when", p.dates), K.el("span", "one", p.one));
+        ul.appendChild(li);
+      });
+      body.appendChild(ul);
+
+      var row = K.el("div", "controls");
+      if (d.page) {
+        var open = K.el("a", "btn " + (d.color === "sky" ? "" : d.color), "open the " + d.name + " page →");
+        open.href = K.link(d.page); row.appendChild(open);
+      } else {
+        ["codeforces", "leetcode"].forEach(function (k) { var L = D.profile.links[k]; var a2 = K.el("a", "btn sage", L.label + " · " + L.handle + " ↗"); a2.href = L.url; a2.rel = "noopener"; a2.target = "_blank"; row.appendChild(a2); });
+      }
+      var courses = K.el("span", "caption", "courses: " + d.courses.join(", "));
+      row.appendChild(courses);
+      body.appendChild(row);
+      det.appendChild(body);
+      root.appendChild(det);
+    });
+
+    function openFromHash() {
+      var id = location.hash.slice(1), el = id && document.getElementById(id);
+      if (el && el.tagName === "DETAILS") { el.open = true; el.scrollIntoView({ block: "start" }); }
+    }
+    openFromHash(); window.addEventListener("hashchange", openFromHash);
+    K.$("openall").addEventListener("click", function () { root.querySelectorAll("details").forEach(function (d) { d.open = true; }); });
+    K.$("closeall").addEventListener("click", function () { root.querySelectorAll("details").forEach(function (d) { d.open = false; }); });
+  })();
+  </script>
+</body>
+</html>

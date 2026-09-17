@@ -1,185 +1,98 @@
 (function () {
   var K = Sketch, $ = K.$, S = K.S, T = K.T, E = K.E, F = K.filled;
-  var ENV = { b: 3, c: 4, x: 5, y: 2 };
+  var MONO = "var(--mono)";
+  function arrow(parent, x1, y1, x2, y2, seed, color) {
+    S(parent, "line", [x1, y1, x2, y2], { sw: 2, seed: seed, color: color });
+    var dx = x2 - x1, dy = y2 - y1, l = Math.hypot(dx, dy), ux = dx / l, uy = dy / l;
+    S(parent, "linearPath", [[[x2 - ux * 10 - uy * 6, y2 - uy * 10 + ux * 6], [x2, y2], [x2 - ux * 10 + uy * 6, y2 - uy * 10 - ux * 6]]], { sw: 2, seed: seed + 1, color: color });
+  }
+  function node(parent, x, y, label, color, seed, d) {
+    F(parent, "circle", [x, y, d || 36], color, { seed: seed, gap: 4 });
+    T(parent, x, y + 5, label, { size: 14, weight: 700, family: MONO });
+  }
 
-  /* ---------- belt ---------- */
+  /* =================== Psylang =================== */
   (function () {
-    var s = $("belt");
-    S(s, "path", ["M20 30 L880 30 M20 58 L880 58"], { sw: 1.6, seed: 2 });
-    E("line", { x1: 20, y1: 44, x2: 880, y2: 44, stroke: "currentColor", "stroke-width": 2, "stroke-dasharray": "4 20", class: K.reduce ? "" : "belt", opacity: .5 }, s);
-    [60, 300, 540, 780].forEach(function (x, i) { S(s, "circle", [x, 44, 22], { sw: 1.4, seed: 10 + i }); });
-    [["lexer", 180, "peach"], ["parser", 420, "sky"], ["IR", 660, "sage"]].forEach(function (st, i) {
-      F(s, "rectangle", [st[1] - 44, 6, 88, 22], st[2], { seed: 20 + i * 3, sw: 1.4 });
-      T(s, st[1], 23, st[0], { size: 15, weight: 700 });
+    var s = $("fig-ps");
+    // source
+    F(s, "rectangle", [16, 16, 300, 40], "sheet", { seed: 1, sw: 2 });
+    T(s, 30, 42, "var int a = b * (c + 2);", { size: 15, anchor: "start", family: MONO });
+    T(s, 330, 42, "← source", { size: 13, anchor: "start" });
+
+    // station 1: lexer
+    arrow(s, 60, 60, 60, 86, 2);
+    T(s, 16, 106, "1 · lexer (Flex)", { size: 14, weight: 700, anchor: "start", color: "red" });
+    var toks = [["var", "sky"], ["int", "sky"], ["a", "sky"], ["=", "peach"], ["b", "sky"], ["*", "peach"], ["(", "sheet"], ["c", "sky"], ["+", "peach"], ["2", "sage"], [")", "sheet"], [";", "sheet"]];
+    var tx = 16;
+    toks.forEach(function (t, i) {
+      var w = t[0].length * 10 + 16;
+      F(s, "rectangle", [tx, 116, w, 26], t[1], { seed: 10 + i * 2, sw: 1.2, gap: 4 });
+      T(s, tx + w / 2, 134, t[0], { size: 13, family: MONO });
+      tx += w + 6;
     });
+
+    // station 2: parser -> AST
+    arrow(s, 60, 146, 60, 176, 40);
+    T(s, 16, 196, "2 · parser (LALR(1))", { size: 14, weight: 700, anchor: "start", color: "red" });
+    var nodes = { eq: [150, 220, "="], a: [100, 268, "a"], mul: [200, 268, "*"], b: [160, 316, "b"], plus: [240, 316, "+"], c: [210, 358, "c"], two: [270, 358, "2"] };
+    [["eq", "a"], ["eq", "mul"], ["mul", "b"], ["mul", "plus"], ["plus", "c"], ["plus", "two"]].forEach(function (e, i) {
+      var p = nodes[e[0]], c = nodes[e[1]];
+      S(s, "line", [p[0], p[1], c[0], c[1]], { sw: 1.4, seed: 50 + i });
+    });
+    Object.keys(nodes).forEach(function (k, i) {
+      var n = nodes[k], isLeaf = ["a", "b", "c", "two"].indexOf(k) !== -1;
+      node(s, n[0], n[1], n[2], isLeaf ? (k === "two" ? "sage" : "sky") : "peach", 70 + i * 3, 32);
+    });
+
+    // station 3: semantic analyzer
+    arrow(s, 300, 268, 356, 244, 100);
+    T(s, 370, 196, "3 · semantic analyzer", { size: 14, weight: 700, anchor: "start", color: "red" });
+    F(s, "rectangle", [370, 208, 170, 84], "sheet", { seed: 102, sw: 1.6 });
+    [["a : int", "declared ✓"], ["b : int", "declared ✓"], ["c : int", "declared ✓"], ["types", "match ✓"]].forEach(function (r, i) {
+      T(s, 382, 228 + i * 18, r[0], { size: 12, anchor: "start", family: MONO });
+      T(s, 528, 228 + i * 18, r[1], { size: 12, anchor: "end" });
+    });
+
+    // station 4: IR
+    arrow(s, 540, 296, 560, 314, 110);
+    T(s, 644, 78, "4 · TAC IR", { size: 14, weight: 700, anchor: "end", color: "red" });
+    F(s, "rectangle", [470, 88, 174, 70], "sage", { seed: 120, gap: 7, sw: 1.6 });
+    ["t1 = c + 2", "t2 = b * t1", "a  = t2"].forEach(function (q, i) { T(s, 486, 112 + i * 19, q, { size: 13, anchor: "start", family: MONO }); });
+    S(s, "path", ["M562 318 C 640 300, 660 200, 600 166"], { sw: 1.8, seed: 130 });
+    S(s, "linearPath", [[[598, 178], [600, 165], [612, 170]]], { sw: 1.8, seed: 131 });
+    T(s, 470, 360, "quadruples: (op, arg1, arg2, result)", { size: 12 });
   })();
 
-  /* ---------- lexer ---------- */
-  function lex(src) {
-    var re = /\s*(?:(\d+(?:\.\d+)?)|([A-Za-z_]\w*)|(&&|\|\||==|!=|<=|>=|[-+*\/<>=!])|([()]))/y, out = [], m;
-    re.lastIndex = 0;
-    while (re.lastIndex < src.length) {
-      var at = re.lastIndex;
-      m = re.exec(src);
-      if (!m) { if (/^\s*$/.test(src.slice(at))) break; throw { msg: "lexer: I don't know what '" + src.slice(at).trim()[0] + "' is", pos: at }; }
-      if (m[1]) out.push({ t: "num", v: m[1] });
-      else if (m[2]) out.push({ t: "id", v: m[2] });
-      else if (m[3]) out.push({ t: "op", v: m[3] });
-      else if (m[4]) out.push({ t: "p", v: m[4] });
-      else break;
-    }
-    return out;
-  }
-
-  /* ---------- parser (precedence climbing) ---------- */
-  var PREC = { "||": 1, "&&": 2, "==": 3, "!=": 3, "<": 4, ">": 4, "<=": 4, ">=": 4, "+": 5, "-": 5, "*": 6, "/": 6 };
-  function parse(toks) {
-    var i = 0;
-    function peek() { return toks[i]; }
-    function eat(v) { var t = toks[i]; if (!t || (v && t.v !== v)) throw { msg: "parser: expected '" + v + "'" + (t ? " but found '" + t.v + "'" : " at the end") }; i++; return t; }
-    function primary() {
-      var t = peek();
-      if (!t) throw { msg: "parser: the expression ends too early" };
-      if (t.v === "(") { eat("("); var e = expr(0); eat(")"); return e; }
-      if (t.v === "-" || t.v === "!") { eat(); return { k: "unary", op: t.v, a: primary() }; }
-      if (t.t === "num") { eat(); return { k: "num", v: t.v }; }
-      if (t.t === "id") { eat(); return { k: "var", v: t.v }; }
-      throw { msg: "parser: didn't expect '" + t.v + "' here" };
-    }
-    function expr(min) {
-      var left = primary();
-      while (peek() && PREC[peek().v] && PREC[peek().v] > min) {
-        var op = eat().v;
-        left = { k: "bin", op: op, a: left, b: expr(PREC[op]) };
-      }
-      return left;
-    }
-    if (!toks[0] || toks[0].t !== "id") throw { msg: "parser: start with a variable name, like  a = …" };
-    var target = eat().v; eat("=");
-    var value = expr(0);
-    if (i < toks.length) throw { msg: "parser: leftover '" + toks[i].v + "' at the end" };
-    return { k: "assign", target: target, value: value };
-  }
-
-  /* ---------- semantic check ---------- */
-  function check(node, errs) {
-    if (!node) return;
-    if (node.k === "var" && !(node.v in ENV)) errs.push("'" + node.v + "' is used but never declared");
-    ["a", "b", "value"].forEach(function (k) { if (node[k]) check(node[k], errs); });
-  }
-
-  /* ---------- TAC ---------- */
-  function tac(ast) {
-    var q = [], tn = 0, ln = 0;
-    function tmp() { return "t" + (++tn); }
-    function gen(n) {
-      if (n.k === "num" || n.k === "var") return n.v;
-      if (n.k === "unary") { var a = gen(n.a), t = tmp(); q.push([n.op === "-" ? "neg" : "not", a, "", t]); return t; }
-      if (n.op === "&&" || n.op === "||") {
-        var r = tmp(), L = "L" + (++ln);
-        q.push(["=", gen(n.a), "", r]);
-        q.push([n.op === "&&" ? "ifFalse" : "ifTrue", r, "", "goto " + L]);
-        q.push(["=", gen(n.b), "", r]);
-        q.push(["label", "", "", L]);
-        return r;
-      }
-      var x = gen(n.a), y = gen(n.b), t2 = tmp();
-      q.push([n.op, x, y, t2]);
-      return t2;
-    }
-    q.push(["=", gen(ast.value), "", ast.target]);
-    return q;
-  }
-
-  /* ---------- tree-walk eval ---------- */
-  function evaluate(n) {
-    switch (n.k) {
-      case "num": return parseFloat(n.v);
-      case "var": return ENV[n.v];
-      case "unary": return n.op === "-" ? -evaluate(n.a) : !evaluate(n.a);
-      case "bin":
-        if (n.op === "&&") return evaluate(n.a) && evaluate(n.b);
-        if (n.op === "||") return evaluate(n.a) || evaluate(n.b);
-        var a = evaluate(n.a), b = evaluate(n.b);
-        return { "+": a + b, "-": a - b, "*": a * b, "/": a / b, "<": a < b, ">": a > b, "<=": a <= b, ">=": a >= b, "==": a === b, "!=": a !== b }[n.op];
-    }
-  }
-
-  /* ---------- AST drawing ---------- */
-  function drawAst(ast) {
-    var s = $("ast"); s.innerHTML = "";
-    var root = { label: "=", kids: [{ label: ast.target, kids: [] }, toTree(ast.value)] };
-    function toTree(n) {
-      if (n.k === "num" || n.k === "var") return { label: n.v, kids: [], leaf: n.k };
-      if (n.k === "unary") return { label: n.op, kids: [toTree(n.a)] };
-      return { label: n.op, kids: [toTree(n.a), toTree(n.b)] };
-    }
-    var col = 0, depthMax = 0, GX = 64, GY = 62;
-    (function layout(n, d) {
-      depthMax = Math.max(depthMax, d);
-      n.d = d;
-      if (!n.kids.length) { n.x = col++ * GX; return; }
-      n.kids.forEach(function (k) { layout(k, d + 1); });
-      n.x = (n.kids[0].x + n.kids[n.kids.length - 1].x) / 2;
-    })(root, 0);
-    var width = Math.max(400, col * GX + 40), height = (depthMax + 1) * GY + 20;
-    s.setAttribute("viewBox", "0 0 " + width + " " + height);
-    s.style.minWidth = Math.min(width, 900) * 0.8 + "px";
-    var off = (width - (col - 1) * GX) / 2, seed = 1;
-    (function edges(n) { n.kids.forEach(function (k) { S(s, "line", [n.x + off, n.d * GY + 30, k.x + off, k.d * GY + 30], { sw: 1.4, seed: seed++ }); edges(k); }); })(root);
-    (function nodes(n) {
-      var c = n.leaf === "num" ? "sage" : n.leaf === "var" ? "sky" : "peach";
-      F(s, "circle", [n.x + off, n.d * GY + 30, 40], c, { seed: 100 + seed++, gap: 4 });
-      T(s, n.x + off, n.d * GY + 36, n.label, { size: 16, weight: 700, family: "var(--mono)" });
-      n.kids.forEach(nodes);
-    })(root);
-  }
-
-  function run() {
-    var src = $("src").value, toksEl = $("toks"), diag = $("diag"), quads = $("quads");
-    toksEl.innerHTML = ""; diag.textContent = ""; quads.innerHTML = ""; $("result").textContent = "";
-    $("env").innerHTML = "declared: " + Object.keys(ENV).map(function (k) { return "<b>" + k + "</b> = " + ENV[k]; }).join(", ");
-    var toks;
-    try { toks = lex(src); } catch (e) { diag.textContent = e.msg; $("ast").innerHTML = ""; return; }
-    toks.forEach(function (t) {
-      var chip = K.el("span", "tok " + t.t); chip.appendChild(document.createTextNode(t.v));
-      chip.appendChild(K.el("small", null, { id: "IDENT", num: "NUMBER", op: "OP", p: "PAREN" }[t.t]));
-      toksEl.appendChild(chip);
-    });
-    var ast;
-    try { ast = parse(toks); } catch (e) { diag.textContent = e.msg; $("ast").innerHTML = ""; return; }
-    drawAst(ast);
-    var errs = []; check(ast, errs);
-    if (errs.length) { diag.textContent = "semantic error: " + errs.join("; "); }
-    var q = tac(ast);
-    var head = quads.insertRow(); ["#", "op", "arg1", "arg2", "result"].forEach(function (h) { var th = document.createElement("th"); th.textContent = h; head.appendChild(th); });
-    q.forEach(function (r, i) { var tr = quads.insertRow(); [i + 1].concat(r).forEach(function (c) { tr.insertCell().textContent = c; }); });
-    if (!errs.length) {
-      var v = evaluate(ast.value);
-      if (typeof v === "number" && !isFinite(v)) $("result").innerHTML = "<b>" + ast.target + "</b> = " + v + "  (you divided by zero)";
-      else $("result").innerHTML = "<b>" + ast.target + "</b> = " + (typeof v === "number" ? Math.round(v * 1000) / 1000 : v);
-    } else $("result").textContent = "won't run until the semantic error is fixed";
-  }
-
-  ["a = b * (c + 2)", "ok = x > 0 && y < 10", "d = -b + c / 4", "oops = z + 1"].forEach(function (ex) {
-    var b = K.el("button", "btn ghost", ex); b.type = "button"; b.style.fontFamily = "var(--mono)"; b.style.fontSize = "14px";
-    b.addEventListener("click", function () { $("src").value = ex; run(); });
-    $("examples").appendChild(b);
-  });
-  $("src").addEventListener("input", run);
-  run();
-
-  /* ---------- Jlox REPL doodle ---------- */
+  /* =================== Jlox =================== */
   (function () {
-    var s = $("repl");
-    F(s, "rectangle", [10, 10, 500, 180], "sheet", { seed: 1, sw: 2 });
-    S(s, "line", [10, 40, 510, 40], { sw: 1.4, seed: 2 });
-    [30, 50, 70].forEach(function (x, i) { S(s, "circle", [x, 25, 10], { fill: true, fillStyle: "solid", noStroke: true, color: ["red", "peach", "sage"][i], seed: 3 + i }); });
-    var lines = [["> var greeting = \"hello\";", ""], ["> { var greeting = \"inner\"; print greeting; }", "inner"], ["> print greeting;", "hello"], ["> print 1 + ;", "[line 1] Error at ';': Expect expression."]];
-    var y = 66;
-    lines.forEach(function (l, i) {
-      T(s, 26, y, l[0], { size: 14, anchor: "start", family: "var(--mono)" }); y += 22;
-      if (l[1]) { T(s, 26, y, l[1], { size: 14, anchor: "start", family: "var(--mono)", color: i === 3 ? "red" : null }); y += 24; }
+    var s = $("fig-jl");
+    F(s, "rectangle", [16, 16, 250, 38], "sheet", { seed: 1, sw: 2 });
+    T(s, 30, 41, "print (1 + 2) * x;", { size: 15, anchor: "start", family: MONO });
+    var n = { pr: [150, 96, "print"], mul: [150, 164, "*"], plus: [90, 232, "+"], x: [220, 232, "x"], one: [50, 300, "1"], two: [130, 300, "2"] };
+    [["pr", "mul"], ["mul", "plus"], ["mul", "x"], ["plus", "one"], ["plus", "two"]].forEach(function (e, i) {
+      S(s, "line", [n[e[0]][0], n[e[0]][1], n[e[1]][0], n[e[1]][1]], { sw: 1.4, seed: 10 + i });
     });
+    Object.keys(n).forEach(function (k, i) {
+      var v = n[k], leaf = ["one", "two", "x"].indexOf(k) !== -1;
+      if (k === "pr") { F(s, "rectangle", [v[0] - 34, v[1] - 16, 68, 32], "sheet", { seed: 30, sw: 1.6 }); T(s, v[0], v[1] + 5, "print", { size: 14, weight: 700, family: MONO }); }
+      else node(s, v[0], v[1], v[2], leaf ? (k === "x" ? "sky" : "sage") : "peach", 40 + i * 3, 36);
+    });
+    // evaluation order
+    [[26, 290, "1"], [154, 290, "2"], [62, 222, "3 → 3"], [246, 222, "4 → 4"], [180, 154, "5 → 12"], [190, 90, "6 → prints 12"]].forEach(function (o, i) {
+      T(s, o[0], o[1], o[2], { size: 13, color: "red", anchor: i === 0 || i === 2 ? "end" : "start", weight: 700 });
+    });
+
+    // environments
+    T(s, 470, 40, "environments", { size: 15, weight: 700 });
+    F(s, "rectangle", [330, 56, 290, 230], "sky", { seed: 60, gap: 9, sw: 2 });
+    T(s, 344, 80, "global", { size: 13, anchor: "start", weight: 700 });
+    T(s, 344, 104, "x = 4", { size: 14, anchor: "start", family: MONO });
+    T(s, 344, 126, "greeting = \"hello\"", { size: 14, anchor: "start", family: MONO });
+    F(s, "rectangle", [360, 146, 236, 116], "sheet", { seed: 70, sw: 1.8 });
+    T(s, 374, 170, "{ block }", { size: 13, anchor: "start", weight: 700 });
+    T(s, 374, 196, "greeting = \"inner\"", { size: 14, anchor: "start", family: MONO });
+    T(s, 374, 226, "print greeting → inner", { size: 13, anchor: "start" });
+    T(s, 374, 248, "x → found in global: 4", { size: 13, anchor: "start" });
+    T(s, 470, 314, "inner shadows outer, outer stays \"hello\"", { size: 12 });
   })();
 })();

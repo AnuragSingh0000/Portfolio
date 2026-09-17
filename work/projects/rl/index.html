@@ -4,20 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Anurag Singh · reinforcement learning</title>
-  <meta name="description" content="Deep RL agents for Atari Pac-Man: DQN, DDQN, Deep SARSA and A2C variants, with frame stacking and GAE.">
+  <meta name="description" content="A comparative analysis of deep RL agents in Ms. Pac-Man: DQN, DDQN, Deep SARSA and A2C, with frame stacking and GAE.">
   <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Delius&family=Courier+Prime&display=swap">
   <link rel="stylesheet" href="../../../assets/css/site.css">
-  <style>
-    .mover{transition:transform .1s linear}
-    .epoch{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;font-family:var(--hand);font-size:17px}
-    .epoch output{font-family:var(--display);font-size:30px;min-width:3ch;text-align:right}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
-    .card{padding:16px 18px;border-radius:10px;display:flex;flex-direction:column;gap:6px;background:var(--sheet)}
-    .card b{font-family:var(--display);font-weight:400;font-size:28px;line-height:1}
-  </style>
 </head>
 <body data-root="../../../" data-page="project" data-domain="rl">
   <header id="nav"></header>
@@ -26,61 +18,46 @@
     <section class="page-head">
       <span class="route">/work/projects/rl/</span>
       <h1>RL &amp; Multi-agent</h1>
-      <p>Agents that learn by trying, failing and trying again. Which is, honestly, <mark>also how I learned RL</mark>.</p>
+      <p>Deep reinforcement learning work from the Foundations of Multi-agent AI course, comparing value-based and actor-critic agents on Atari Ms. Pac-Man.</p>
     </section>
 
     <section class="project" id="pacman" aria-labelledby="pac-h">
       <div class="project-head">
-        <div class="meta"><span>aug – nov 2025</span><span>with Prof. Manisha Padala</span><span>Atari ALE · Gymnasium</span></div>
-        <h2 id="pac-h">Pac-Man learns to stop panicking</h2>
+        <span class="route" data-meta="pacman"></span>
+        <h2 id="pac-h">Comparative Analysis of Deep RL Agents in Pac-Man</h2>
+        <div class="proj-links" data-links="pacman"><span class="tag peach">PyTorch</span><span class="tag">Gymnasium</span><span class="tag">Atari ALE</span><span class="tag">DQN · DDQN · SARSA · A2C</span></div>
       </div>
       <div class="split">
-        <div class="sheet stack">
-          <svg id="maze" viewBox="0 0 540 330" role="img" aria-label="A Pac-Man maze. The agent's path gets cleaner as training epochs increase."></svg>
-          <div class="epoch">
-            <label for="ep">epoch</label>
-            <input type="range" id="ep" min="0" max="400" step="25" value="25">
-            <output id="epout" for="ep">25</output>
-          </div>
-          <div class="controls">
-            <button class="btn peach" id="play" type="button">run an episode</button>
-            <span class="readout" id="score" aria-live="polite"></span>
-          </div>
-          <p class="caption">A toy agent in a toy maze: exploration shrinks as epochs grow, just like ε-greedy. The red scribble is its path.</p>
-        </div>
-        <div class="stack">
-          <p>I trained agents on Atari Pac-Man for 400 epochs and compared five deep RL algorithms, including <b>DQN</b>, <b>DDQN</b>, <b>Deep SARSA</b> and <b>A2C</b> variants.</p>
-          <p>Early on, an agent mostly explores at random: that's ε-greedy exploration. Experience replay lets it learn from old mistakes, and target networks stop it chasing its own tail. Slide the epoch and watch the panic turn into a plan.</p>
-          <details class="hood">
-            <summary>under the hood</summary>
-            <ul>
-              <li>Experience replay, target networks, frame stacking, ε-greedy exploration</li>
-              <li>A2C with Generalized Advantage Estimation and temperature annealing, for stabler convergence</li>
-            </ul>
-            <div class="tags"><span class="tag peach">PyTorch</span><span class="tag">Gymnasium</span><span class="tag">Atari ALE</span></div>
-            <a data-repo="pacman" href="#">GitHub ↗</a>
-          </details>
+        <figure class="sheet">
+          <svg id="fig-pac" viewBox="0 0 660 330" role="img" aria-label="A Pac-Man maze with an untrained agent's scribbled path and a trained agent's clean route, plus four stacked frames showing a ghost's direction"></svg>
+          <figcaption>Red: an early agent, mostly exploring. Ink: a trained agent. Right: why four frames beat one.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>Ms. Pac-Man is a tough teacher. Points come from pellets, and game-over comes from ghosts you can only dodge if you know where they're heading.</p>
+          <p>An agent starts out exploring almost at random (the red scribble). With enough experience it learns routes that clear pellets and stay out of trouble (the ink path). The trick that helped most is on the right: one frame can't show which way a ghost is moving, but a <mark>stack of the last four frames</mark> can.</p>
         </div>
       </div>
-    </section>
-
-    <section class="split flip" aria-labelledby="stack-h">
-      <div class="sheet"><svg id="flip" viewBox="0 0 600 220" role="img" aria-label="One frame cannot show which way a ghost moves; four stacked frames can"></svg></div>
-      <div class="stack">
-        <h2 id="stack-h">The trick that won: memory</h2>
-        <p>Show a network one frame and it can't tell which way a ghost is moving. <b>Stack the last four frames</b> like a flipbook and motion becomes visible.</p>
-        <p>That one change gave DDQN a <mark>53% higher peak score</mark>.</p>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Implemented and compared <b>5 deep RL algorithms</b> on Atari Ms. Pac-Man: DQN, DDQN, DDQN with frame stacking, Deep SARSA and A2C.</li>
+          <li>Trained agents over <b>400 epochs</b> with experience replay, target networks and ε-greedy exploration, and evaluated each over 100 test episodes.</li>
+          <li>Improved DDQN with <b>frame stacking</b> for temporal awareness, raising the peak score by <b>53%</b> (2,190 → 3,340).</li>
+          <li>Implemented A2C with Generalized Advantage Estimation and temperature annealing, improving stability and convergence.</li>
+          <li>Compared stochastic and deterministic policy evaluation. Stochastic policies escaped the loops that trapped greedy agents.</li>
+        </ul>
+        <div class="metrics">
+          <div class="metric wob"><b>+53%</b><span>peak score with frame stacking</span></div>
+          <div class="metric wob"><b>3,340</b><span>best score (DDQN + stack)</span></div>
+          <div class="metric wob"><b>5</b><span>algorithms compared</span></div>
+          <div class="metric wob"><b>400</b><span>training epochs</span></div>
+        </div>
       </div>
-    </section>
-
-    <section class="cards" aria-label="Highlights">
-      <div class="card wob"><span class="label">the winner</span><b>DDQN + frame stacking</b><span>+53% peak score, thanks to temporal awareness</span></div>
-      <div class="card wob"><span class="label">the steady one</span><b>A2C + GAE</b><span>temperature annealing for more stable training and convergence</span></div>
-      <div class="card wob"><span class="label">the rest of the lineup</span><b>DQN · DDQN · Deep SARSA</b><span>all trained over 400 epochs on the same game</span></div>
     </section>
 
     <section class="stack">
-      <h3>Other corners of the web</h3>
+      <h3>Other domains</h3>
       <div class="domain-jump" id="others"></div>
     </section>
   </main>
@@ -90,6 +67,59 @@
   <script src="../../../assets/js/data.js"></script>
   <script src="../../../assets/js/sketch.js"></script>
   <script src="../../../assets/js/domain.js"></script>
-  <script src="page.js"></script>
+  <script>
+  (function () {
+    var K = Sketch, S = K.S, T = K.T, E = K.E, F = K.filled, s = K.$("fig-pac");
+    var MAP = ["###############", "#.............#", "#.##.#####.##.#", "#.#.........#.#", "#.#.##.#.##.#.#", "#...#..P..#...#", "#.#.#.###.#.#.#", "#.............#", "###############"];
+    var C = 30, OX = 8, OY = 40, W = MAP[0].length, H = MAP.length, start;
+    for (var y = 0; y < H; y++) for (var x = 0; x < W; x++) {
+      if (MAP[y][x] === "#") S(s, "rectangle", [OX + x * C + 2, OY + y * C + 2, C - 4, C - 4], { fill: true, noStroke: true, color: "navy", seed: 1000 + y * W + x, gap: 5 });
+      if (MAP[y][x] === "P") start = [x, y];
+    }
+    var wall = function (x, y) { return MAP[y][x] === "#"; };
+    var D4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    var moves = function (p) { return D4.filter(function (d) { return !wall(p[0] + d[0], p[1] + d[1]); }); };
+    var key = function (p) { return p[0] + "," + p[1]; };
+    function run(eps, seed, steps) {
+      var rnd = K.rng(seed), pel = {}, p = start.slice(), path = [p.slice()], last = [0, 0];
+      for (var yy = 0; yy < H; yy++) for (var xx = 0; xx < W; xx++) if (MAP[yy][xx] === ".") pel[xx + "," + yy] = 1;
+      for (var t = 0; t < steps; t++) {
+        var o = moves(p), d;
+        if (rnd() < eps) { var nb = o.filter(function (m) { return !(m[0] === -last[0] && m[1] === -last[1]); }); d = (nb.length ? nb : o)[Math.floor(rnd() * (nb.length || o.length))]; }
+        else {
+          var q = [[p[0], p[1], null]], seen = {}; seen[key(p)] = 1; d = null;
+          while (q.length) { var c = q.shift(); if (pel[c[0] + "," + c[1]] && c[2]) { d = c[2]; break; } moves(c).forEach(function (m) { var n = [c[0] + m[0], c[1] + m[1]]; if (!seen[key(n)]) { seen[key(n)] = 1; q.push([n[0], n[1], c[2] || m]); } }); }
+          if (!d) break;
+        }
+        last = d; p = [p[0] + d[0], p[1] + d[1]]; path.push(p.slice()); delete pel[key(p)];
+      }
+      return { path: path, left: pel };
+    }
+    var early = run(0.95, 7, 60), good = run(0, 3, 90);
+    for (y = 0; y < H; y++) for (x = 0; x < W; x++) if (MAP[y][x] === "." && good.left[x + "," + y]) E("circle", { cx: OX + x * C + C / 2, cy: OY + y * C + C / 2, r: 3, fill: "currentColor" }, s);
+    var pts = function (r, off) { return r.path.map(function (c) { return [OX + c[0] * C + C / 2 + off, OY + c[1] * C + C / 2 + off]; }); };
+    S(s, "linearPath", [pts(early, -4)], { sw: 1.6, color: "red", seed: 5, rough: 1.2 });
+    S(s, "linearPath", [pts(good, 3)], { sw: 2.4, seed: 6, rough: .6 });
+    var pc = E("g", { transform: "translate(" + (OX + start[0] * C + C / 2) + " " + (OY + start[1] * C + C / 2) + ")" }, s);
+    E("path", { d: "M0 0 L12 -7 A14 14 0 1 0 12 7 Z", fill: "var(--peach)", stroke: "currentColor", "stroke-width": 2, "stroke-linejoin": "round" }, pc);
+    T(s, 8, 26, "Ms. Pac-Man (sketch)", { size: 15, weight: 700, anchor: "start" });
+
+    function ghost(parent, x, y, sc, op, seed) {
+      var g = E("g", { transform: "translate(" + x + " " + y + ") scale(" + sc + ")", opacity: op }, parent);
+      F(g, "path", ["M-13 12 L-13 -2 C -13 -18, 13 -18, 13 -2 L13 12 L8 7 L4 12 L0 7 L-4 12 L-8 7 Z"], "sky", { seed: seed, gap: 3 });
+      S(g, "circle", [-5, -3, 5], { fill: true, fillStyle: "solid", noStroke: true, seed: seed + 3 });
+      S(g, "circle", [5, -3, 5], { fill: true, fillStyle: "solid", noStroke: true, seed: seed + 4 });
+    }
+    T(s, 550, 26, "1 frame vs 4 frames", { size: 15, weight: 700 });
+    F(s, "rectangle", [480, 44, 140, 90], "sheet", { seed: 300, sw: 1.6 });
+    ghost(s, 550, 92, 1.4, 1, 310);
+    T(s, 596, 72, "?", { size: 24, color: "red", weight: 700 });
+    for (var i = 0; i < 4; i++) F(s, "rectangle", [470 + i * 14, 168 + i * 8, 140, 90], "sheet", { seed: 320 + i * 3, sw: 1.2 });
+    for (var j = 0; j < 4; j++) ghost(s, 530 + j * 20, 222, 1.1, 0.25 + j * 0.25, 340 + j * 7);
+    S(s, "line", [522, 282, 600, 282], { sw: 2.2, color: "red", seed: 370 });
+    S(s, "linearPath", [[[590, 276], [602, 282], [590, 288]]], { sw: 2.2, color: "red", seed: 371 });
+    T(s, 560, 306, "heading right", { size: 14, color: "red" });
+  })();
+  </script>
 </body>
 </html>

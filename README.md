@@ -15,7 +15,8 @@ index.html                    signpost: pick a path
 hello/                        informal side (placeholder for now)
 work/
   index.html                  home + interest web
-  research/                   Cycle Sound → SRIP → BMVC paper, Skan AI
+  projects/index.html         all projects, grouped by domain (expandable)
+  experience/                 research (Cycle Sound → SRIP → BMVC paper) and Skan AI internship
   projects/
     deep-learning/            Cycle Sound, ViT robustness, DAGMM
     ml/                       HAR, next-word predictor, molecular dynamics
@@ -24,7 +25,7 @@ work/
     databases/                B+ tree, WAL, Olympia, E-gate
     compilers/                Psylang, Jlox
     hardware/                 Arduino musical keyboard
-  skills/                     skills as charms
+  skills/                     skills grouped by area, linked to projects
   milestones/                 JEE, Dean's List, PORs
   offline/                    favourites, Hollow Knight, piano
   contact/
@@ -41,14 +42,14 @@ archive/v1/                   the previous portfolio
 
 Most edits happen in **`assets/js/data.js`**:
 
-- Add a project to `projects`, with its `domain`, `kind` and `skills`. The interest-web circle sizes and the charm dots update automatically.
+- Add a project to `projects`, with its `domain`, `kind`, `skills` and optional `repo` / `site` / `app` links. The interest web, the Projects page and the Skills page all update automatically.
 - Add a line to a favourite with its `note` field. It shows on the back of the ticket stub.
 
-Page text (the stories for each project) lives in each page's `index.html`.
+Each project's write-up (the idea and my contributions) lives in its domain page's `index.html`, and its drawing lives in that page's script.
 
 ## Run locally
 
-Folder URLs like `/work/research/` need a local server:
+Folder URLs like `/work/experience/` need a local server:
 
 ```bash
 python -m http.server 8000

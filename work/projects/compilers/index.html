@@ -4,34 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Anurag Singh · compilers & languages</title>
-  <meta name="description" content="Psylang, a custom language with a Flex lexer, LALR(1) parser, semantic analyzer and TAC IR, and Jlox, a tree-walk interpreter in Java.">
+  <meta name="description" content="Psylang, a custom language with a Flex lexer, LALR(1) parser, semantic analyzer and TAC IR; and Jlox, a tree-walk interpreter in Java.">
   <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Delius&family=Courier+Prime&display=swap">
   <link rel="stylesheet" href="../../../assets/css/site.css">
-  <style>
-    .stage{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start;padding-block:14px;border-top:2px dashed var(--faint)}
-    .stage:first-of-type{border-top:0}
-    @media (max-width:560px){.stage{grid-template-columns:1fr}}
-    .stage h4{font-size:24px}
-    .stage .caption{display:block}
-    .src{font-family:var(--mono);font-size:18px;width:100%;padding:8px 10px;border:0;border-bottom:2px solid var(--ink);background:transparent;color:var(--ink)}
-    .toks{display:flex;flex-wrap:wrap;gap:6px}
-    .tok{font-family:var(--mono);font-size:14px;padding:2px 8px;border-radius:6px;display:flex;flex-direction:column;align-items:center;line-height:1.2}
-    .tok small{font-family:var(--hand);font-size:11px;color:var(--muted)}
-    .tok.id{background:color-mix(in srgb,var(--sky) 45%, var(--sheet))}
-    .tok.num{background:color-mix(in srgb,var(--sage) 45%, var(--sheet))}
-    .tok.op{background:color-mix(in srgb,var(--peach) 45%, var(--sheet))}
-    .tok.p{background:color-mix(in srgb,var(--faint) 70%, var(--sheet))}
-    .quads{font-family:var(--mono);font-size:14px;border-collapse:collapse;width:100%}
-    .quads th{font-family:var(--hand);font-weight:700;text-align:left;color:var(--muted);font-size:14px;padding:2px 10px 4px 0}
-    .quads td{padding:2px 10px 2px 0;border-top:1px dashed var(--faint);font-variant-numeric:tabular-nums}
-    .diag{font-family:var(--hand);font-size:17px;color:var(--red)}
-    .astbox{overflow-x:auto}
-    .belt{animation:belt 1.2s linear infinite}
-    @keyframes belt{to{stroke-dashoffset:-24}}
-  </style>
 </head>
 <body data-root="../../../" data-page="project" data-domain="pl">
   <header id="nav"></header>
@@ -40,82 +18,75 @@
     <section class="page-head">
       <span class="route">/work/projects/compilers/</span>
       <h1>Compilers &amp; Languages</h1>
-      <p>Writing a language is the best way to find out what <mark>"=" really means</mark>. I've built two: one compiles, one interprets.</p>
+      <p>Language implementation projects covering both approaches to running code: a compiler front end for a custom language, and a tree-walk interpreter for Lox.</p>
+      <nav class="jump" id="jump" aria-label="Projects on this page"></nav>
     </section>
 
+    <!-- Psylang -->
     <section class="project" id="psylang" aria-labelledby="ps-h">
       <div class="project-head">
-        <div class="meta"><span>jan 2026 – present</span><span>with Prof. Shouvick Mondal</span><span>C · Flex · Bison</span></div>
-        <h2 id="ps-h">The conveyor belt of code</h2>
+        <span class="route" data-meta="psylang"></span>
+        <h2 id="ps-h">Psylang: A Custom Programming Language</h2>
+        <div class="proj-links" data-links="psylang"><span class="tag sage">C</span><span class="tag">Flex</span><span class="tag">Bison · LALR(1)</span><span class="tag">Make</span></div>
       </div>
-      <div class="sheet">
-        <svg id="belt" viewBox="0 0 900 70" aria-hidden="true"></svg>
-        <div class="stage">
-          <div><h4>source</h4><span class="caption">type an assignment</span></div>
-          <div class="stack">
-            <input class="src" id="src" type="text" value="a = b * (c + 2)" spellcheck="false" autocomplete="off" aria-label="Source code">
-            <div class="controls" id="examples"></div>
-          </div>
-        </div>
-        <div class="stage">
-          <div><h4>lexer</h4><span class="caption">scissors: chop into tokens</span></div>
-          <div class="toks" id="toks"></div>
-        </div>
-        <div class="stage">
-          <div><h4>parser</h4><span class="caption">stack tokens into a tree</span></div>
-          <div class="stack">
-            <div class="astbox"><svg id="ast" viewBox="0 0 600 200" role="img" aria-label="Abstract syntax tree"></svg></div>
-            <p class="diag" id="diag" aria-live="polite"></p>
-          </div>
-        </div>
-        <div class="stage">
-          <div><h4>IR</h4><span class="caption">three-address code, as quadruples</span></div>
-          <div style="overflow-x:auto"><table class="quads" id="quads"></table></div>
-        </div>
-        <div class="stage">
-          <div><h4>run it</h4><span class="caption">tree-walk, like Jlox</span></div>
-          <div class="stack">
-            <p class="readout" id="env"></p>
-            <p class="readout" id="result"></p>
-          </div>
-        </div>
-      </div>
-      <p class="caption">A tiny expression language for show. Psylang itself is much bigger: closures, lambdas, user-defined types and more.</p>
       <div class="split">
-        <div class="stack">
-          <p><b>Psylang</b> is a language I'm designing from scratch. Source text passes along a belt: a <b>Flex</b> lexer cuts it into tokens, an <b>LALR(1)</b> parser builds a tree, and then two more stations do the real work.</p>
-          <ul>
-            <li><b>Semantic analyzer</b> on the AST: precise scoping, type checks, return reachability and helpful diagnostics</li>
-            <li><b>TAC IR generator</b> producing quadruples for arithmetic, control flow, functions and short-circuit logic</li>
-            <li>Supports closures, lambdas and user-defined types</li>
-          </ul>
+        <figure class="sheet">
+          <svg id="fig-ps" viewBox="0 0 660 380" role="img" aria-label="One line of Psylang passing through the lexer, parser, semantic analyzer and IR generator"></svg>
+          <figcaption>One line of code, four stations.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>A compiler is a conveyor belt. Source text goes in one end. The <b>lexer</b> cuts it into tokens, and the <b>parser</b> stacks them into a tree.</p>
+          <p>The <b>semantic analyzer</b> checks that the tree makes sense: is <code>b</code> declared, do the types match, does every path return? Then the <b>IR generator</b> rewrites it as three-address code, small instructions with at most one operator each, ready for a back end.</p>
         </div>
-        <div class="stack">
-          <p class="fun">Try <span style="font-family:var(--mono)">ok = x &gt; 0 &amp;&amp; y &lt; 10</span> to see short-circuit jumps, or use a variable nobody declared.</p>
-          <details class="hood">
-            <summary>under the hood</summary>
-            <div class="tags"><span class="tag sage">C</span><span class="tag">Flex</span><span class="tag">Bison · LALR(1)</span><span class="tag">Make</span></div>
-            <a data-repo="psylang" href="#">GitHub ↗</a>
-          </details>
+      </div>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Designed the language and wrote its specification: a <b>Flex</b> lexer and an <b>LALR(1)</b> Bison parser supporting closures, lambdas and user-defined types.</li>
+          <li>Built an AST-based <b>semantic analyzer</b> enforcing precise scoping, type checks and return reachability, with diagnostics that point at the exact line and column.</li>
+          <li>Implemented a <b>TAC IR generator</b> producing quadruples for arithmetic, control flow, functions and short-circuit evaluation, with IR, symbol-table and type-table dumps.</li>
+          <li>Set up Make-based builds and test suites for the lexer, parser, semantic analyzer and IR, with automatic comparison against expected outputs.</li>
+        </ul>
+        <div class="metrics">
+          <div class="metric wob"><b>4</b><span>compiler stages so far</span></div>
+          <div class="metric wob"><b>4</b><span>test suites, run with one command</span></div>
+          <div class="metric wob"><b>LALR(1)</b><span>parser, with a generated parse table</span></div>
         </div>
       </div>
     </section>
 
-    <section class="split flip" id="jlox" aria-labelledby="jl-h">
-      <div class="sheet stack">
-        <svg id="repl" viewBox="0 0 520 200" role="img" aria-label="A REPL session in Jlox"></svg>
+    <!-- Jlox -->
+    <section class="project" id="jlox" aria-labelledby="jl-h">
+      <div class="project-head">
+        <span class="route" data-meta="jlox"></span>
+        <h2 id="jl-h">Jlox: A Tree-Walk Interpreter for Lox</h2>
+        <div class="proj-links" data-links="jlox"><span class="tag sage">Java</span><span class="tag">recursive descent</span><span class="tag">Crafting Interpreters</span></div>
       </div>
-      <div class="stack">
-        <span class="route">language project · Java</span>
-        <h2 id="jl-h">Jlox, the little sibling</h2>
-        <p>A tree-walk interpreter in Java for the Lox language from <i>Crafting Interpreters</i>. It has a scanner, a recursive-descent parser, generated AST classes, runtime environments with variable assignment and block scoping, and both a REPL and file execution with syntax and runtime error reporting.</p>
-        <p>The "run it" station above works the same way: it walks the tree and evaluates each node.</p>
-        <a data-repo="jlox" href="#">GitHub ↗</a>
+      <div class="split flip">
+        <figure class="sheet">
+          <svg id="fig-jl" viewBox="0 0 660 330" role="img" aria-label="An expression's syntax tree evaluated from the leaves up, next to nested environment boxes"></svg>
+          <figcaption>Walk the tree, evaluate as you go. Environments nest like boxes.</figcaption>
+        </figure>
+        <div class="idea">
+          <h3>The idea</h3>
+          <p>Jlox skips the compiler back end entirely. It parses Lox into a syntax tree and then <b>walks the tree</b>, evaluating each node as it goes: leaves first, then the operators above them, following the red numbers in the drawing.</p>
+          <p>Variables live in <b>environments</b> that nest like boxes, so an inner block can shadow an outer variable without ever touching it.</p>
+        </div>
+      </div>
+      <div class="contrib">
+        <h3>My contributions</h3>
+        <ul>
+          <li>Built a tree-walk interpreter in Java for the Lox language from <i>Crafting Interpreters</i>.</li>
+          <li>Implemented the scanner, a recursive-descent parser, and AST code-generation tooling in a clean package structure.</li>
+          <li>Implemented runtime environments with variable assignment and block scoping.</li>
+          <li>Supported both a REPL and file execution, with syntax and runtime error reporting.</li>
+        </ul>
       </div>
     </section>
 
     <section class="stack">
-      <h3>Other corners of the web</h3>
+      <h3>Other domains</h3>
       <div class="domain-jump" id="others"></div>
     </section>
   </main>

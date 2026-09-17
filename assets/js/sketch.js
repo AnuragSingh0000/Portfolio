@@ -198,7 +198,7 @@
   var page = document.body.getAttribute("data-page");
   var nav = $("nav");
   if (nav) {
-    var items = [["home", "interests", "work/"], ["research", "research", "work/research/"], ["skills", "skills", "work/skills/"],
+    var items = [["home", "interests", "work/"], ["projects", "projects", "work/projects/"], ["experience", "experience", "work/experience/"], ["skills", "skills", "work/skills/"],
       ["milestones", "milestones", "work/milestones/"], ["offline", "offline", "work/offline/"], ["contact", "contact", "work/contact/"]];
     nav.className = "site-nav";
     var brand = el("a", "brand"); brand.href = link("work/");
@@ -210,7 +210,7 @@
     items.forEach(function (it) {
       var li = el("li"), a = el("a", null, it[1]);
       a.href = link(it[2]);
-      if (page === it[0] || (it[0] === "home" && page === "project")) a.setAttribute("aria-current", "page");
+      if (page === it[0] || (it[0] === "projects" && page === "project")) a.setAttribute("aria-current", "page");
       li.appendChild(a); ul.appendChild(li);
     });
     var navInner = el("nav"); navInner.setAttribute("aria-label", "Main"); navInner.style.display = "contents"; navInner.appendChild(ul);
