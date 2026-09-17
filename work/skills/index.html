@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@300;400;700&family=Delius&family=Courier+Prime&display=swap">
-  <link rel="stylesheet" href="../../assets/css/site.css">
+  <link rel="stylesheet" href="../../assets/css/site.css?v=20260917">
 </head>
 <body data-root="../../" data-page="skills">
   <header id="nav"></header>
@@ -32,9 +32,9 @@
   </main>
   <footer id="foot"></footer>
 
-  <script src="../../assets/vendor/rough.js"></script>
-  <script src="../../assets/js/data.js"></script>
-  <script src="../../assets/js/sketch.js"></script>
+  <script src="../../assets/vendor/rough.js?v=20260917"></script>
+  <script src="../../assets/js/data.js?v=20260917"></script>
+  <script src="../../assets/js/sketch.js?v=20260917"></script>
   <script>
   (function () {
     var K = Sketch, D = SITE, $ = K.$, chips = [];
@@ -53,8 +53,7 @@
         var li = K.el("li");
         if (p.page) { var a = K.el("a", null, p.title); a.href = href(p); li.appendChild(a); }
         else if (p.domain === "algo") { var a2 = K.el("a", null, p.title); a2.href = D.profile.links.codeforces.url; a2.rel = "noopener"; li.appendChild(a2); }
-        else li.appendChild(K.el("b", null, p.title));
-        li.appendChild(K.el("span", null, p.one));
+        else li.appendChild(K.el("span", null, p.title));
         ul.appendChild(li);
       });
       d.appendChild(ul);

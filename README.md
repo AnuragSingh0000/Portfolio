@@ -58,6 +58,10 @@ python -m http.server 8000
 
 Opening the files directly from disk also works. Links are rewritten to point at `index.html`.
 
+## Updating the live site
+
+GitHub Pages lets browsers cache CSS and JS for about 10 minutes. Every page loads them with a version tag (`site.css?v=20260917`), so after changing any CSS or JS file, bump that number everywhere (find and replace `?v=20260917`). Visitors then get the new files immediately instead of a stale copy.
+
 ## Deploy on GitHub Pages
 
 1. Push this folder to a GitHub repository (e.g. `AnuragSingh0000.github.io` for a root URL).
